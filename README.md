@@ -1,20 +1,12 @@
-# Postivie Incidence Reporting
+# React + Vite
 
-## Overview
-This project is part of a Master's thesis at ETH Zurich. The aim of the thesis is to explore the potential and requirements for positive incidence reporting in cybersecurity. While incident reporting is a well-established practice in many organizations, it typically focuses on negative events, such as breaches, failures, or vulnerabilities.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-However, there is value in also capturing positive cybersecurity incidents, such as successful defense operations, resilience during attacks, or well-implemented best practices. These "positive" stories can offer insights into what contributes to secure and stable operations.
+Currently, two official plugins are available:
 
-The first step in this project involves evaluating existing reporting tools to assess whether they support—or can be adapted to support—reporting of positive events. This prototype serves as a basis for comparison and helps identify the features needed to make positive incidence reporting effective and usable.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Technical Ideas
-For simplicity, the application is built as a frontend-only prototype that runs entirely locally in the browser.
+## Expanding the ESLint configuration
 
-The core idea is to provide a simple form-based interface for users to record cybersecurity incidents—both traditional (e.g., date, cause, damage) and positive events. All entries are stored locally, and users can edit their entries and export them as a JSON file, which can later be imported into a database if needed.
-
-We intentionally avoid connecting to a backend or database for several reasons:
-- This is an early-stage prototype, and we want to stay flexible during development.
-- The tool is being tested by companies, some of which may be concerned about unintentionally sharing sensitive information. With this setup, all data stays local, and testers are fully in control—even if they use fictional examples.
-- Avoids the need for user authentication, security, or database moderation, which are outside the scope of this thesis.
-- Keeps the focus on feature exploration and usability, not infrastructure.
-- The design is easily extendable. The current frontend can be quickly connected to a backend and database when needed.
+If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
