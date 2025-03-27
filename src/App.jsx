@@ -1,35 +1,28 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route, Link } from 'react-router-dom'
+import Home from './pages/Home'
+import PositiveEntry from './pages/PositiveEntry'
+import NegativeEntry from './pages/NegativeEntry'
+import PositiveViewEdit from './pages/PositiveViewEdit'
+import NegativeViewEdit from './pages/NegativeViewEdit'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+export default function App() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
+      <nav style={{ marginBottom: '2rem' }}>
+        <Link to="/">Home</Link> |{' '}
+        <Link to="/positive-entry">Positive Entry</Link> |{' '}
+        <Link to="/negative-entry">Negative Entry</Link> |{' '}
+        <Link to="/positive-view">View Positive</Link> |{' '}
+        <Link to="/negative-view">View Negative</Link>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/positive-entry" element={<PositiveEntry />} />
+        <Route path="/negative-entry" element={<NegativeEntry />} />
+        <Route path="/positive-view" element={<PositiveViewEdit />} />
+        <Route path="/negative-view" element={<NegativeViewEdit />} />
+      </Routes>
+    </div>
   )
 }
-
-export default App
