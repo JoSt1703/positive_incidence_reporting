@@ -1,14 +1,18 @@
-import { Typography } from '@mui/material'
+import { useEffect, useState } from 'react'
+import ReactMarkdown from 'react-markdown'
 
 export default function Home() {
+  const [markdown, setMarkdown] = useState('Loading...')
+
+  useEffect(() => {
+    fetch('/HomePageContent.md')
+      .then((res) => res.text())
+      .then(setMarkdown)
+  }, [])
+
   return (
-    <div>
-      <Typography variant="h4" gutterBottom>
-        Welcome to the Security Journal
-      </Typography>
-      <Typography variant="body1">
-        Use this app to report and view both positive and negative cybersecurity events. Your inputs help identify trends, track incidents, and improve response over time.
-      </Typography>
+    <div style={{ maxWidth: '800px' }}>
+      <ReactMarkdown>{markdown}</ReactMarkdown>
     </div>
   )
 }

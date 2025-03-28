@@ -20,9 +20,9 @@ We intentionally avoid connecting to a backend or database for several reasons:
 - The design is easily extendable. The current frontend can be quickly connected to a backend and database when needed.
 
 ## Page Setup
-The react app consist of 5 pages:
-- The Homepage: just the first page
-- PositiveEntry: for enering the positive data
-- NegativeEntry: for enering the negative data
-- PositiveViewEdit: to view and edit positive data
-- NegativeViewEdit: to view and edit negative data
+The React app consists of 5 pages:
+- The Homepage
+- A form to enter Positive Events in Cybersecurity
+- A form to enter Cybersecurity Incidents
+- A log to view and edit Positive Events
+- A log to view and edit Incidents

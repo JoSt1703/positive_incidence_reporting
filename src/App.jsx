@@ -26,7 +26,7 @@ export default function App() {
       >
         <Box sx={{ p: 2 }}>
           <Typography variant="h6" noWrap>
-            Security Journal
+            Cybersecurity Reporting
           </Typography>
         </Box>
         <List>
