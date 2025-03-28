@@ -24,7 +24,9 @@ import {
     'Environmental'
   ]
   
-  export default function ActionSection({ control }) {
+  export default function ActionSection({ control, watch }) {
+    const selected = watch('actions') || []
+  
     return (
     <Accordion defaultExpanded={false}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -46,11 +48,13 @@ import {
                   {...field}
                   label="Actions Involved"
                   multiple
+                  value={field.value || []}
+                  onChange={(event) => field.onChange(event.target.value)}
                   renderValue={(selected) => selected.join(', ')}
                 >
                   {actionOptions.map((option) => (
                     <MenuItem key={option} value={option}>
-                      <Checkbox checked={field.value.includes(option)} />
+                      <Checkbox checked={selected.includes(option)} />
                       <ListItemText primary={option} />
                     </MenuItem>
                   ))}
@@ -78,4 +82,3 @@ import {
       </Accordion>
     )
   }
-  

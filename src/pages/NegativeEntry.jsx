@@ -22,7 +22,7 @@ export default function NegativeEntry() {
       industry: '',
       country: '',
       companySize: '',
-      action: '',
+      actions: [],
       actionNotes: ''
     }
   })
@@ -45,7 +45,7 @@ export default function NegativeEntry() {
         <IncidentDetails control={control} watch={watch} />
         <TimelineSection control={control} />
         <VictimSection control={control} />
-        <ActionSection control={control} />
+        <ActionSection control={control} watch={watch} />
 
         <Box sx={{ mt: 3 }}>
           <Button variant="contained" type="submit">
