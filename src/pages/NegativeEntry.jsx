@@ -56,7 +56,7 @@ export default function NegativeEntry() {
             control={control}
             rules={{ required: true }}
             render={({ field }) => (
-              <Select {...field} label="Security Incident Status *">
+              <Select {...field} label="Security Incident Status">
                 {incidentStatusOptions.map((opt) => (
                   <MenuItem key={opt.value} value={opt.value}>
                     {opt.label}
