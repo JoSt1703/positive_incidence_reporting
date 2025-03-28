@@ -75,7 +75,7 @@ export default function PositiveViewEdit() {
               <TableRow>
                 <TableCell>Date</TableCell>
                 <TableCell>Summary</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell>Options</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
