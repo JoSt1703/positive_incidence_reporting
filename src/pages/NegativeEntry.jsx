@@ -3,6 +3,7 @@ import { Box, Button, Typography } from '@mui/material'
 import IncidentDetails from '../components/IncidentDetails'
 import TimelineSection from '../components/TimelineSection'
 import VictimSection from '../components/VictimSection'
+import ActionSection from '../components/ActionSection'
 
 export default function NegativeEntry() {
   const { handleSubmit, control, watch } = useForm({
@@ -20,7 +21,9 @@ export default function NegativeEntry() {
       targeted: '',
       industry: '',
       country: '',
-      companySize: ''
+      companySize: '',
+      action: '',
+      actionNotes: ''
     }
   })
 
@@ -42,6 +45,7 @@ export default function NegativeEntry() {
         <IncidentDetails control={control} watch={watch} />
         <TimelineSection control={control} />
         <VictimSection control={control} />
+        <ActionSection control={control} />
 
         <Box sx={{ mt: 3 }}>
           <Button variant="contained" type="submit">
