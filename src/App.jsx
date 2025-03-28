@@ -1,6 +1,7 @@
 import { Routes, Route, Link } from 'react-router-dom'
 import { Box, Drawer, List, ListItem, ListItemText, Typography } from '@mui/material'
 import Home from './pages/Home'
+import NegativeEntry from './pages/NegativeEntry'
 
 const drawerWidth = 240
 
