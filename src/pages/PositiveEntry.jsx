@@ -42,8 +42,8 @@ export default function PositiveEntry() {
         🛡️ Submit a Success Story
       </Typography>
       <Typography gutterBottom>
-        Share a positive cybersecurity event or initiative — from successfully mitigating a threat,
-        to proactive improvements like training, MFA rollouts, or pen test results.
+        This form is used to enter a new positive cybersecurity event. Enter as much information as you can —
+        every entry can be updated later in the Event Log.
       </Typography>
 
       <Alert severity="info" sx={{ mb: 2 }}>
