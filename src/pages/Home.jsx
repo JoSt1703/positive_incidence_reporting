@@ -12,11 +12,32 @@ export default function Home() {
   }, [])
 
   return (
-    <Box sx={{ maxWidth: '800px', mx: 'auto', mt: 4 }}>
+    <Box
+      sx={{
+        maxWidth: '800px',
+        margin: '0 auto',
+        padding: '2rem',
+        textAlign: 'justify',
+      }}
+    >
       <Typography variant="h4" gutterBottom>
         Positive Incidence Reporting
       </Typography>
-      <ReactMarkdown>{content}</ReactMarkdown>
+
+      <ReactMarkdown
+        components={{
+          p: ({ node, ...props }) => (
+            <Typography
+              variant="body1"
+              paragraph
+              sx={{ textAlign: 'justify' }}
+              {...props}
+            />
+          ),
+        }}
+      >
+        {content}
+      </ReactMarkdown>
     </Box>
   )
 }
