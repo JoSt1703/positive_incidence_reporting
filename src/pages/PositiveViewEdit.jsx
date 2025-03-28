@@ -29,9 +29,9 @@ export default function PositiveViewEdit() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem('successStories'))
+    const stored = JSON.parse(sessionStorage.getItem('successStories'))
     if (!stored || stored.length === 0) {
-      localStorage.setItem('successStories', JSON.stringify(EXAMPLE_STORIES))
+      sessionStorage.setItem('successStories', JSON.stringify(EXAMPLE_STORIES))
       setStories(EXAMPLE_STORIES)
     } else {
       setStories(stored)
@@ -46,7 +46,7 @@ export default function PositiveViewEdit() {
     const updated = [...stories]
     updated.splice(index, 1)
     setStories(updated)
-    localStorage.setItem('successStories', JSON.stringify(updated))
+    sessionStorage.setItem('successStories', JSON.stringify(updated))
   }
 
   const handleDownloadOne = (story, index) => {

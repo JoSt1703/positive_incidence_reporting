@@ -7,7 +7,7 @@ import { useEffect } from 'react'
 export default function PositiveEntry() {
   const { index } = useParams()
   const navigate = useNavigate()
-  const stored = JSON.parse(localStorage.getItem('successStories')) || []
+  const stored = JSON.parse(sessionStorage.getItem('successStories')) || []
 
   const { handleSubmit, register, reset, watch } = useForm({
     defaultValues: {
@@ -30,7 +30,7 @@ export default function PositiveEntry() {
     } else {
       stored.push(data)
     }
-    localStorage.setItem('successStories', JSON.stringify(stored))
+    sessionStorage.setItem('successStories', JSON.stringify(stored))
     navigate('/positive-view')
   }
 

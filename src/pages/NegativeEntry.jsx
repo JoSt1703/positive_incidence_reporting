@@ -13,7 +13,7 @@ import DiscoverySection from '../components/DiscoverySection'
 export default function NegativeEntry() {
   const { index } = useParams()
   const navigate = useNavigate()
-  const stored = JSON.parse(localStorage.getItem('incidents')) || []
+  const stored = JSON.parse(sessionStorage.getItem('incidents')) || []
 
   const { handleSubmit, control, watch, reset } = useForm({
     defaultValues: {
@@ -57,7 +57,7 @@ export default function NegativeEntry() {
     } else {
       stored.push(data)
     }
-    localStorage.setItem('incidents', JSON.stringify(stored))
+    sessionStorage.setItem('incidents', JSON.stringify(stored))
     navigate('/negative-view')
   }
 

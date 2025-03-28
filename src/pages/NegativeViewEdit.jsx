@@ -7,7 +7,7 @@ export default function NegativeViewEdit() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem('incidents')) || []
+    const stored = JSON.parse(sessionStorage.getItem('incidents')) || []
     setIncidents(stored)
   }, [])
 
@@ -19,7 +19,7 @@ export default function NegativeViewEdit() {
     const updated = [...incidents]
     updated.splice(index, 1)
     setIncidents(updated)
-    localStorage.setItem('incidents', JSON.stringify(updated))
+    sessionStorage.setItem('incidents', JSON.stringify(updated))
   }
 
   const handleDownloadOne = (incident, index) => {
