@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { Box, Button, Typography } from '@mui/material'
 import IncidentDetails from '../components/IncidentDetails'
@@ -9,7 +11,11 @@ import AssetSection from '../components/AssetSection'
 import DiscoverySection from '../components/DiscoverySection'
 
 export default function NegativeEntry() {
-  const { handleSubmit, control, watch } = useForm({
+  const { index } = useParams()
+  const navigate = useNavigate()
+  const stored = JSON.parse(localStorage.getItem('incidents')) || []
+
+  const { handleSubmit, control, watch, reset } = useForm({
     defaultValues: {
       status: '',
       summary: '',
@@ -38,8 +44,21 @@ export default function NegativeEntry() {
     }
   })
 
+  // Load values into form if editing
+  useEffect(() => {
+    if (index !== undefined && stored[index]) {
+      reset(stored[index])
+    }
+  }, [index, reset])
+
   const onSubmit = (data) => {
-    console.log('Submitted data:', data)
+    if (index !== undefined) {
+      stored[parseInt(index)] = data
+    } else {
+      stored.push(data)
+    }
+    localStorage.setItem('incidents', JSON.stringify(stored))
+    navigate('/negative-view')
   }
 
   return (

@@ -59,9 +59,10 @@ export default function App() {
       >
         <Box sx={{ width: '100%', maxWidth: 800 }}>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/negative-entry" element={<NegativeEntry />} />
-            <Route path="/negative-view" element={<NegativeViewEdit />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/negative-entry" element={<NegativeEntry />} />
+          <Route path="/edit/:index" element={<NegativeEntry />} />
+          <Route path="/negative-view" element={<NegativeViewEdit />} />
           </Routes>
         </Box>
       </Box>
