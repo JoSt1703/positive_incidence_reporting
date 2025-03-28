@@ -4,7 +4,7 @@ import Home from './pages/Home'
 import NegativeEntry from './pages/NegativeEntry'
 
 const drawerWidth = 240
-const adjustedMargin = drawerWidth - 40 // Adjust this to taste (e.g., -32, -24)
+const adjustedMargin = drawerWidth - 200 // Adjust this to taste (e.g., -32, -24)
 
 const navItems = [
   { path: '/', label: '🏠 Home' },
