@@ -11,10 +11,12 @@
     "postinstall": "cp README.md public/HomePageContent.md"
   },
   "dependencies": {
+    "@date-io/date-fns": "^3.2.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.0.0",
     "@mui/material": "^7.0.0",
+    "@mui/x-date-pickers": "^7.28.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
