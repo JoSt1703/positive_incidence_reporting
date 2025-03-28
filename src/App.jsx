@@ -2,6 +2,7 @@ import { Routes, Route, Link } from 'react-router-dom'
 import { Box, Drawer, List, ListItem, ListItemText, Typography } from '@mui/material'
 import Home from './pages/Home'
 import NegativeEntry from './pages/NegativeEntry'
+import NegativeViewEdit from './pages/NegativeViewEdit'
 
 const drawerWidth = 240
 const adjustedMargin = drawerWidth - 150
@@ -51,7 +52,7 @@ export default function App() {
         sx={{
           flexGrow: 1,
           p: 3,
-          ml: `${adjustedMargin}px`, // adjusted from 240px
+          ml: `${adjustedMargin}px`,
           display: 'flex',
           justifyContent: 'flex-start'
         }}
@@ -60,6 +61,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/negative-entry" element={<NegativeEntry />} />
+            <Route path="/negative-view" element={<NegativeViewEdit />} />
           </Routes>
         </Box>
       </Box>
