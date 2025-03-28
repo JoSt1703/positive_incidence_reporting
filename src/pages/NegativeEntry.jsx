@@ -1,4 +1,4 @@
 export default function NegativeEntry() {
-    return <h2>Enter Negative Incident</h2>
+    return <h2>Negative Incidence Log</h2>
   }
   

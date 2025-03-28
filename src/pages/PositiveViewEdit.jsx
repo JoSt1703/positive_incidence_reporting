@@ -1,3 +1,3 @@
 export default function PositiveViewEdit() {
-    return <h2>View / Edit Positive Incidents</h2>
+    return <h2>Positive Event Log</h2>
   }
