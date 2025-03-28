@@ -1,40 +1,57 @@
 import { Routes, Route, Link } from 'react-router-dom'
+import { Box, Drawer, List, ListItem, ListItemText, Typography } from '@mui/material'
 import Home from './pages/Home'
-import PositiveEntry from './pages/PositiveEntry'
-import NegativeEntry from './pages/NegativeEntry'
-import PositiveViewEdit from './pages/PositiveViewEdit'
-import NegativeViewEdit from './pages/NegativeViewEdit'
+
+const drawerWidth = 240
+
+const navItems = [
+  { path: '/', label: '🏠 Home' },
+  { path: '/positive-entry', label: '🛡️ Event Reporting' },
+  { path: '/negative-entry', label: '🛑 Incidence Reporting' },
+  { path: '/positive-view', label: '📗 Event Log' },
+  { path: '/negative-view', label: '📕 Incidence Log' }
+]
 
 export default function App() {
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', fontFamily: 'sans-serif' }}>
+    <Box sx={{ display: 'flex' }}>
       {/* Sidebar */}
-      <nav style={{
-        width: '220px',
-        background: '#f0f0f0',
-        padding: '2rem 1rem',
-        boxShadow: '2px 0 5px rgba(0,0,0,0.1)'
-      }}>
-        <h2 style={{ marginBottom: '2rem', fontSize: '1.2rem' }}>My Journal</h2>
-        <ul style={{ listStyle: 'none', padding: 0, lineHeight: '2' }}>
-          <li><Link to="/">🏠 Home</Link></li>
-          <li><Link to="/positive-entry">🛡️ Positive Event Reporting</Link></li>
-          <li><Link to="/negative-entry">🛑 Negative Incidence Reporting</Link></li>
-          <li><Link to="/positive-view">📗 Positive Event Log</Link></li>
-          <li><Link to="/negative-view">📕 Negative Incidence Log</Link></li>
-        </ul>
-      </nav>
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' }
+        }}
+      >
+        <Box sx={{ p: 2 }}>
+          <Typography variant="h6" noWrap>
+            Security Journal
+          </Typography>
+        </Box>
+        <List>
+          {navItems.map((item) => (
+            <ListItem
+              button
+              key={item.path}
+              component={Link}
+              to={item.path}
+            >
+              <ListItemText primary={item.label} />
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
 
-      {/* Main Content */}
-      <main style={{ flex: 1, padding: '2rem' }}>
+      {/* Main content */}
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, p: 3, ml: `${drawerWidth}px` }}
+      >
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/positive-entry" element={<PositiveEntry />} />
-          <Route path="/negative-entry" element={<NegativeEntry />} />
-          <Route path="/positive-view" element={<PositiveViewEdit />} />
-          <Route path="/negative-view" element={<NegativeViewEdit />} />
         </Routes>
-      </main>
-    </div>
+      </Box>
+    </Box>
   )
 }

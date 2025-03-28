@@ -1,4 +1,4 @@
 export default function NegativeViewEdit() {
-    return <h2>View / Edit Negative Incidents</h2>
+    return <h2>Incidence Log</h2>
   }
   
