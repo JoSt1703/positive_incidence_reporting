@@ -1,5 +1,3 @@
-// pages/NegativeEntry.jsx
-
 import { useForm } from 'react-hook-form'
 import { Box, Button, Typography } from '@mui/material'
 import IncidentDetails from '../components/IncidentDetails'
