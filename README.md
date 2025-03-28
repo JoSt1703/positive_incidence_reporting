@@ -7,7 +7,7 @@ However, there is value in also capturing positive cybersecurity incidents, such
 
 The first step in this project involves evaluating existing reporting tools to assess whether they support—or can be adapted to support—reporting of positive events. This prototype serves as a basis for comparison and helps identify the features needed to make positive incidence reporting effective and usable.
 
-## Technical Ideas
+## System Design
 For simplicity, the application is built as a frontend-only prototype that runs entirely locally in the browser.
 
 The core idea is to provide a simple form-based interface for users to record cybersecurity incidents—both traditional (e.g., date, cause, damage) and positive events. All entries are stored locally, and users can edit their entries and export them as a JSON file, which can later be imported into a database if needed.
