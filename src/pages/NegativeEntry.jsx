@@ -11,17 +11,16 @@ export default function NegativeEntry() {
       reference: '',
       confidence: '',
       impact: '',
-      incidentOccurred: null,
-      compromise: null,
-      exfiltration: null,
-      discovery: null,
-      containment: null
+      incidentOccurred: '',
+      compromise: '',
+      exfiltration: '',
+      discovery: '',
+      containment: ''
     }
   })
 
   const onSubmit = (data) => {
     console.log('Submitted data:', data)
-    // Later: Save to localStorage or export
   }
 
   return (
@@ -30,15 +29,13 @@ export default function NegativeEntry() {
         🛑 Save a New Security Incident
       </Typography>
       <Typography variant="body1" gutterBottom>
-        This form is used to enter a new cybersecurity incident, such as breaches, compromises, or similar events.
-        Enter as much information as you can — every entry can be updated later in the Incident Log page.
+        This form is used to enter a new cybersecurity incident. Enter as much information as you can —
+        every entry can be updated later in the Incident Log.
       </Typography>
 
       <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 4 }}>
         <IncidentDetails control={control} watch={watch} />
-        <TimelineSection control={control} watch={watch} />
-
-        {/* Future Sections: Timeline, Victim, etc. */}
+        <TimelineSection control={control} />
 
         <Box sx={{ mt: 3 }}>
           <Button variant="contained" type="submit">
