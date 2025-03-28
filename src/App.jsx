@@ -26,7 +26,7 @@ export default function App() {
       >
         <Box sx={{ p: 2 }}>
           <Typography variant="h6" noWrap>
-            Cybersecurity Reporting
+            Menu
           </Typography>
         </Box>
         <List>
@@ -50,6 +50,7 @@ export default function App() {
       >
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/negative-entry" element={<NegativeEntry />} />
         </Routes>
       </Box>
     </Box>
