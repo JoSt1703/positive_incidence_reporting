@@ -4,6 +4,9 @@ import IncidentDetails from '../components/IncidentDetails'
 import TimelineSection from '../components/TimelineSection'
 import VictimSection from '../components/VictimSection'
 import ActionSection from '../components/ActionSection'
+import ActorSection from '../components/ActorSection'
+import AssetSection from '../components/AssetSection'
+import DiscoverySection from '../components/DiscoverySection'
 
 export default function NegativeEntry() {
   const { handleSubmit, control, watch } = useForm({
@@ -23,7 +26,15 @@ export default function NegativeEntry() {
       country: '',
       companySize: '',
       actions: [],
-      actionNotes: ''
+      actionNotes: '',
+      actors: [],
+      actorNotes: '',
+      totalDamage: '',
+      assetHosting: [],
+      assetVariety: [],
+      discoveryInternal: [],
+      discoveryExternal: [],
+      discoveryPartner: []
     }
   })
 
@@ -46,6 +57,9 @@ export default function NegativeEntry() {
         <TimelineSection control={control} />
         <VictimSection control={control} />
         <ActionSection control={control} watch={watch} />
+        <ActorSection control={control} watch={watch} />
+        <AssetSection control={control} watch={watch} />
+        <DiscoverySection control={control} watch={watch} />
 
         <Box sx={{ mt: 3 }}>
           <Button variant="contained" type="submit">
