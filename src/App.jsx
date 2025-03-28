@@ -3,6 +3,8 @@ import { Box, Drawer, List, ListItem, ListItemText, Typography } from '@mui/mate
 import Home from './pages/Home'
 import NegativeEntry from './pages/NegativeEntry'
 import NegativeViewEdit from './pages/NegativeViewEdit'
+import PositiveEntry from './pages/PositiveEntry'
+import PositiveViewEdit from './pages/PositiveViewEdit'
 
 const drawerWidth = 240
 const adjustedMargin = drawerWidth - 150
@@ -63,6 +65,9 @@ export default function App() {
           <Route path="/negative-entry" element={<NegativeEntry />} />
           <Route path="/edit/:index" element={<NegativeEntry />} />
           <Route path="/negative-view" element={<NegativeViewEdit />} />
+          <Route path="/positive-entry" element={<PositiveEntry />} />
+          <Route path="/positive-edit/:index" element={<PositiveEntry />} />
+          <Route path="/positive-view" element={<PositiveViewEdit />} />
           </Routes>
         </Box>
       </Box>

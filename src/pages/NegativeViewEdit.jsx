@@ -36,7 +36,7 @@ export default function NegativeViewEdit() {
   return (
     <Box sx={{ maxWidth: 900, mx: 'auto', mt: 4 }}>
       <Typography variant="h4" gutterBottom>
-        📋 Incident Log
+      📕 Incident Log
       </Typography>
 
       {incidents.length === 0 ? (
