@@ -12,9 +12,9 @@ import {
 
 const incidentStatusOptions = [
   { label: 'Confirmed - A verified security incident', value: 'Confirmed' },
-  { label: 'False Positive - Mistakenly flagged', value: 'False Positive' },
-  { label: 'Near Miss - No compromise occurred', value: 'Near Miss' },
-  { label: 'Suspected - Unverified incident', value: 'Suspected' }
+  { label: 'False Positive - An event mistakenly flagged as an incident', value: 'False Positive' },
+  { label: 'Near Miss - An attack that did not compromise assets', value: 'Near Miss' },
+  { label: 'Suspected - A potential but unverified incident', value: 'Suspected' }
 ]
 
 const confidenceLevels = ['High', 'Medium', 'Low', 'None']
@@ -41,10 +41,10 @@ export default function NegativeEntry() {
   return (
     <Box sx={{ maxWidth: 800 }}>
       <Typography variant="h4" gutterBottom>
-        🛑 Incidence Reporting
+        🛑 Save a New Security Incident
       </Typography>
       <Typography variant="body1" gutterBottom>
-        This is a detailed form. Fill in what you can — the more details, the better.
+      This form is used to enter a new cybersecurity incident, such as breaches, compromises, or similar events. It covers several types, including confirmed incidents and near misses. Enter as much information as you can — every entry can be updated later in the Incident Log page.
       </Typography>
 
       <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 4 }}>
@@ -139,7 +139,7 @@ export default function NegativeEntry() {
 
         <Box sx={{ mt: 3 }}>
           <Button variant="contained" type="submit">
-            Submit Incident
+            Save Incident
           </Button>
         </Box>
       </Box>

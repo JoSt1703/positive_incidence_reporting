@@ -1,18 +1,22 @@
-import { useEffect, useState } from 'react'
+import { Box, Typography } from '@mui/material'
+import { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 
 export default function Home() {
-  const [markdown, setMarkdown] = useState('Loading...')
+  const [content, setContent] = useState('')
 
   useEffect(() => {
     fetch('/HomePageContent.md')
       .then((res) => res.text())
-      .then(setMarkdown)
+      .then(setContent)
   }, [])
 
   return (
-    <div style={{ maxWidth: '800px' }}>
-      <ReactMarkdown>{markdown}</ReactMarkdown>
-    </div>
+    <Box sx={{ maxWidth: '800px', mx: 'auto', mt: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        Positive Incidence Reporting
+      </Typography>
+      <ReactMarkdown>{content}</ReactMarkdown>
+    </Box>
   )
 }
