@@ -3,6 +3,7 @@
 import { useForm } from 'react-hook-form'
 import { Box, Button, Typography } from '@mui/material'
 import IncidentDetails from '../components/IncidentDetails'
+import TimelineSection from '../components/TimelineSection'
 
 export default function NegativeEntry() {
   const { handleSubmit, control, watch } = useForm({
@@ -11,7 +12,12 @@ export default function NegativeEntry() {
       summary: '',
       reference: '',
       confidence: '',
-      impact: ''
+      impact: '',
+      incidentOccurred: null,
+      compromise: null,
+      exfiltration: null,
+      discovery: null,
+      containment: null
     }
   })
 
@@ -32,6 +38,7 @@ export default function NegativeEntry() {
 
       <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 4 }}>
         <IncidentDetails control={control} watch={watch} />
+        <TimelineSection control={control} watch={watch} />
 
         {/* Future Sections: Timeline, Victim, etc. */}
 

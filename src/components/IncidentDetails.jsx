@@ -8,25 +8,25 @@ import {
     MenuItem,
     Select,
     TextField
-  } from '@mui/material'
-  import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-  import { Controller } from 'react-hook-form'
-  
-  const incidentStatusOptions = [
-    { label: 'Confirmed - A verified security incident', value: 'Confirmed' },
-    { label: 'False Positive - An event mistakenly flagged as an incident', value: 'False Positive' },
-    { label: 'Near Miss - An attack that did not compromise assets', value: 'Near Miss' },
-    { label: 'Suspected - A potential but unverified incident', value: 'Suspected' }
-  ]
-  
-  const confidenceLevels = ['High', 'Medium', 'Low', 'None']
-  const impactOptions = ['None', 'Insignificant', 'Minor', 'Moderate', 'Significant', 'Severe']
-  
-  export default function IncidentDetails({ control, watch }) {
+} from '@mui/material'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { Controller } from 'react-hook-form'
+
+const incidentStatusOptions = [
+{ label: 'Confirmed - A verified security incident', value: 'Confirmed' },
+{ label: 'False Positive - An event mistakenly flagged as an incident', value: 'False Positive' },
+{ label: 'Near Miss - An attack that did not compromise assets', value: 'Near Miss' },
+{ label: 'Suspected - A potential but unverified incident', value: 'Suspected' }
+]
+
+const confidenceLevels = ['High', 'Medium', 'Low', 'None']
+const impactOptions = ['None', 'Insignificant', 'Minor', 'Moderate', 'Significant', 'Severe']
+
+export default function IncidentDetails({ control, watch }) {
     const summaryValue = watch('summary') || ''
   
     return (
-      <Accordion defaultExpanded>
+      <Accordion defaultExpanded={true}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography variant="h6">Incident Details</Typography>
         </AccordionSummary>
@@ -76,7 +76,7 @@ import {
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Reference (URL)"
+                label="Reference URL (e.g., GitHub issue, news site, or incident report)"
                 fullWidth
                 margin="normal"
                 type="url"
@@ -91,7 +91,7 @@ import {
               name="confidence"
               control={control}
               render={({ field }) => (
-                <Select {...field} label="Confidence Level">
+                <Select {...field} label="How confident are you in the accuracy of the information provided?">
                   {confidenceLevels.map((level) => (
                     <MenuItem key={level} value={level}>
                       {level}
@@ -122,5 +122,5 @@ import {
         </AccordionDetails>
       </Accordion>
     )
-  }
+}
   
