@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material'
+import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Stack } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
 export default function NegativeViewEdit() {
@@ -15,11 +15,30 @@ export default function NegativeViewEdit() {
     navigate(`/edit/${index}`)
   }
 
+  const handleDelete = (index) => {
+    const updated = [...incidents]
+    updated.splice(index, 1)
+    setIncidents(updated)
+    localStorage.setItem('incidents', JSON.stringify(updated))
+  }
+
+  const handleDownloadOne = (incident, index) => {
+    const json = JSON.stringify(incident, null, 2)
+    const blob = new Blob([json], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `incident_${index + 1}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <Box sx={{ maxWidth: 900, mx: 'auto', mt: 4 }}>
       <Typography variant="h4" gutterBottom>
-        📕 Incident Log
+        📋 Incident Log
       </Typography>
+
       {incidents.length === 0 ? (
         <Typography>No incidents saved yet.</Typography>
       ) : (
@@ -29,7 +48,7 @@ export default function NegativeViewEdit() {
               <TableRow>
                 <TableCell>Status</TableCell>
                 <TableCell>Summary</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell>Options</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -38,9 +57,17 @@ export default function NegativeViewEdit() {
                   <TableCell>{incident.status}</TableCell>
                   <TableCell>{incident.summary}</TableCell>
                   <TableCell>
-                    <Button variant="outlined" size="small" onClick={() => handleEdit(index)}>
-                      Edit
-                    </Button>
+                    <Stack spacing={1} direction="row">
+                      <Button variant="outlined" size="small" onClick={() => handleEdit(index)}>
+                        Edit
+                      </Button>
+                      <Button variant="outlined" size="small" color="error" onClick={() => handleDelete(index)}>
+                        Delete
+                      </Button>
+                      <Button variant="outlined" size="small" onClick={() => handleDownloadOne(incident, index)}>
+                        ⬇️ JSON
+                      </Button>
+                    </Stack>
                   </TableCell>
                 </TableRow>
               ))}
