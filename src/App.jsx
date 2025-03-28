@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import NegativeEntry from './pages/NegativeEntry'
 
 const drawerWidth = 240
+const adjustedMargin = drawerWidth - 40 // Adjust this to taste (e.g., -32, -24)
 
 const navItems = [
   { path: '/', label: '🏠 Home' },
@@ -50,9 +51,9 @@ export default function App() {
         sx={{
           flexGrow: 1,
           p: 3,
-          ml: `${drawerWidth}px`,
+          ml: `${adjustedMargin}px`, // adjusted from 240px
           display: 'flex',
-          justifyContent: 'center'
+          justifyContent: 'flex-start'
         }}
       >
         <Box sx={{ width: '100%', maxWidth: 800 }}>
