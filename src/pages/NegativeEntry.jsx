@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form'
 import { Box, Button, Typography } from '@mui/material'
 import IncidentDetails from '../components/IncidentDetails'
 import TimelineSection from '../components/TimelineSection'
+import VictimSection from '../components/VictimSection'
 
 export default function NegativeEntry() {
   const { handleSubmit, control, watch } = useForm({
@@ -15,7 +16,11 @@ export default function NegativeEntry() {
       compromise: '',
       exfiltration: '',
       discovery: '',
-      containment: ''
+      containment: '',
+      targeted: '',
+      industry: '',
+      country: '',
+      companySize: ''
     }
   })
 
@@ -36,6 +41,7 @@ export default function NegativeEntry() {
       <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 4 }}>
         <IncidentDetails control={control} watch={watch} />
         <TimelineSection control={control} />
+        <VictimSection control={control} />
 
         <Box sx={{ mt: 3 }}>
           <Button variant="contained" type="submit">
