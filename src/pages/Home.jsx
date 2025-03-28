@@ -13,10 +13,6 @@ export default function Home() {
 
   return (
     <Box sx={{ textAlign: 'justify' }}>
-      <Typography variant="h4" gutterBottom>
-        Positive Incidence Reporting
-      </Typography>
-
       <ReactMarkdown>{content}</ReactMarkdown>
     </Box>
   )

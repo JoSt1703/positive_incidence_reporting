@@ -50,7 +50,7 @@ export default function NegativeEntry() {
       <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 4 }}>
         {/* Incident Status */}
         <FormControl fullWidth margin="normal">
-          <InputLabel>Security Incident Status *</InputLabel>
+          <InputLabel>Security Incident Status</InputLabel>
           <Controller
             name="status"
             control={control}
@@ -75,7 +75,7 @@ export default function NegativeEntry() {
           render={({ field }) => (
             <TextField
               {...field}
-              label="Summary *"
+              label="Summary"
               multiline
               rows={4}
               fullWidth
@@ -103,7 +103,7 @@ export default function NegativeEntry() {
 
         {/* Confidence */}
         <FormControl fullWidth margin="normal">
-          <InputLabel>Confidence Level</InputLabel>
+          <InputLabel>Confidence Level: How confident are you in the information you enter</InputLabel>
           <Controller
             name="confidence"
             control={control}
