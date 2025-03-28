@@ -47,12 +47,20 @@ export default function App() {
       {/* Main content */}
       <Box
         component="main"
-        sx={{ flexGrow: 1, p: 3, ml: `${drawerWidth}px` }}
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          ml: `${drawerWidth}px`,
+          display: 'flex',
+          justifyContent: 'center'
+        }}
       >
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/negative-entry" element={<NegativeEntry />} />
-        </Routes>
+        <Box sx={{ width: '100%', maxWidth: 800 }}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/negative-entry" element={<NegativeEntry />} />
+          </Routes>
+        </Box>
       </Box>
     </Box>
   )

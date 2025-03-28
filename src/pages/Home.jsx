@@ -1,5 +1,5 @@
-import { Box, Typography } from '@mui/material'
-import { useState, useEffect } from 'react'
+import { Typography, Box } from '@mui/material'
+import { useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 
 export default function Home() {
@@ -12,32 +12,12 @@ export default function Home() {
   }, [])
 
   return (
-    <Box
-      sx={{
-        maxWidth: '800px',
-        margin: '0 auto',
-        padding: '2rem',
-        textAlign: 'justify',
-      }}
-    >
+    <Box sx={{ textAlign: 'justify' }}>
       <Typography variant="h4" gutterBottom>
         Positive Incidence Reporting
       </Typography>
 
-      <ReactMarkdown
-        components={{
-          p: ({ node, ...props }) => (
-            <Typography
-              variant="body1"
-              paragraph
-              sx={{ textAlign: 'justify' }}
-              {...props}
-            />
-          ),
-        }}
-      >
-        {content}
-      </ReactMarkdown>
+      <ReactMarkdown>{content}</ReactMarkdown>
     </Box>
   )
 }
