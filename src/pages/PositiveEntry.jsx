@@ -1,6 +1,6 @@
 // /pages/PositiveEntry.jsx
 import { useForm } from 'react-hook-form'
-import { Box, Button, TextField, Typography, Alert } from '@mui/material'
+import { Box, Button, TextField, Typography, Alert, MenuItem, Select, InputLabel, FormControl } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 
@@ -14,7 +14,8 @@ export default function PositiveEntry() {
       date: '',
       summary: '',
       detailed_info: '',
-      industry: ''
+      industry: '',
+      category: ''  // Added field for category
     }
   })
 
@@ -86,6 +87,30 @@ export default function PositiveEntry() {
           fullWidth
           margin="normal"
         />
+
+        {/* Category Dropdown */}
+        <FormControl fullWidth margin="normal">
+          <InputLabel>Category</InputLabel>
+          <Select
+            {...register('category', { required: true })}
+            label="Category"
+          >
+            <MenuItem value="Awareness Training">Awareness Training</MenuItem>
+            <MenuItem value="Technical Achievement">Technical Achievement</MenuItem>
+            <MenuItem value="Management">Management</MenuItem>
+            <MenuItem value="Culture">Culture</MenuItem>
+            <MenuItem value="Incident Response Success">Incident Response Success</MenuItem>
+            <MenuItem value="Compliance Achievement">Compliance Achievement</MenuItem>
+            <MenuItem value="Innovation in Security Tools">Innovation in Security Tools</MenuItem>
+            <MenuItem value="Vendor Risk Management">Vendor Risk Management</MenuItem>
+            <MenuItem value="Threat Intelligence Utilization">Threat Intelligence Utilization</MenuItem>
+            <MenuItem value="Data Protection">Data Protection</MenuItem>
+            <MenuItem value="Resilience and Continuity">Resilience and Continuity</MenuItem>
+            <MenuItem value="Employee Security Awareness">Employee Security Awareness</MenuItem>
+            <MenuItem value="Integration Success">Integration Success</MenuItem>
+            <MenuItem value="Regulatory Advocacy">Regulatory Advocacy</MenuItem>
+          </Select>
+        </FormControl>
 
         <Box sx={{ mt: 2 }}>
           <Button type="submit" variant="contained">
