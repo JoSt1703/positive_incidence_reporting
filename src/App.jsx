@@ -101,7 +101,7 @@ export default function App() {
           mt: isMobile ? 7 : 0
         }}
       >
-        <Box sx={{ maxWidth: 1000, mx: 'auto' }}>
+        <Box sx={{ maxWidth: { xs: '100%', sm: 'calc(100% - 120px)', md: 'calc(100% - 160px)' }, mr: 'auto' }}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/negative-entry" element={<NegativeEntry />} />
