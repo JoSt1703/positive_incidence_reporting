@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
-import { Box, Drawer, List, ListItem, ListItemText, Typography, useMediaQuery, useTheme } from '@mui/material'
+import { Box, Drawer, List, ListItem, ListItemText, Typography, useMediaQuery, useTheme, IconButton, AppBar, Toolbar } from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu'
 import Home from './pages/Home'
 import NegativeEntry from './pages/NegativeEntry'
 import NegativeViewEdit from './pages/NegativeViewEdit'
@@ -19,14 +21,64 @@ const navItems = [
 export default function App() {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const [mobileOpen, setMobileOpen] = useState(false)
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen)
+  }
+
+  const drawerContent = (
+    <Box>
+      <Box sx={{ p: 2 }}>
+        <Typography variant="h6" noWrap>
+          Menu
+        </Typography>
+      </Box>
+      <List>
+        {navItems.map((item) => (
+          <ListItem
+            button
+            key={item.path}
+            component={Link}
+            to={item.path}
+            onClick={() => isMobile && setMobileOpen(false)}
+          >
+            <ListItemText primary={item.label} />
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  )
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+    <Box sx={{ display: 'flex' }}>
+      {/* Top AppBar for mobile */}
+      {isMobile && (
+        <AppBar position="fixed" sx={{ zIndex: theme.zIndex.drawer + 1 }}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap sx={{ ml: 2 }}>
+              Incident Reporting
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      )}
+
       {/* Sidebar */}
       <Drawer
-        variant="permanent"
+        variant={isMobile ? 'temporary' : 'permanent'}
+        open={isMobile ? mobileOpen : true}
+        onClose={handleDrawerToggle}
+        ModalProps={{ keepMounted: true }}
         sx={{
-          display: { xs: 'none', sm: 'block' },
+          display: { xs: 'block', sm: 'block' },
           width: drawerWidth,
           flexShrink: 0,
           [`& .MuiDrawer-paper`]: {
@@ -35,23 +87,7 @@ export default function App() {
           }
         }}
       >
-        <Box sx={{ p: 2 }}>
-          <Typography variant="h6" noWrap>
-            Menu
-          </Typography>
-        </Box>
-        <List>
-          {navItems.map((item) => (
-            <ListItem
-              button
-              key={item.path}
-              component={Link}
-              to={item.path}
-            >
-              <ListItemText primary={item.label} />
-            </ListItem>
-          ))}
-        </List>
+        {drawerContent}
       </Drawer>
 
       {/* Main content */}
@@ -59,14 +95,13 @@ export default function App() {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 2,
+          p: { xs: 2, sm: 3 },
           ml: { xs: 0, sm: `${drawerWidth}px` },
           width: '100%',
-          display: 'flex',
-          justifyContent: 'center'
+          mt: isMobile ? 7 : 0
         }}
       >
-        <Box sx={{ width: '100%', maxWidth: 800 }}>
+        <Box sx={{ maxWidth: 1000, mx: 'auto' }}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/negative-entry" element={<NegativeEntry />} />
