@@ -3,8 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useForm, Controller } from 'react-hook-form'
 import {
   Box, Button, Typography, FormControl,
-  InputLabel, MenuItem, Select, Paper
+  InputLabel, MenuItem, Select
 } from '@mui/material'
+
 import IncidentDetails from '../components/IncidentDetails'
 import TimelineSection from '../components/TimelineSection'
 import VictimSection from '../components/VictimSection'
@@ -18,8 +19,8 @@ export default function NegativeEntry() {
   const navigate = useNavigate()
   const stored = JSON.parse(sessionStorage.getItem('incidents')) || []
 
-  const lockedRole = sessionStorage.getItem('role') || 'viewer'
-  const isViewer = lockedRole === 'viewer'
+  const role = sessionStorage.getItem('role') || 'viewer'
+  const isViewer = role === 'viewer'
 
   const { handleSubmit, control, watch, reset } = useForm({
     defaultValues: {
@@ -59,14 +60,14 @@ export default function NegativeEntry() {
   }, [index, reset])
 
   const onSubmit = (data) => {
-    if (lockedRole === 'viewer' && data.visibility !== 'public') {
+    if (role === 'viewer' && data.visibility !== 'public') {
       alert('Global Viewer can only submit public incidents.')
       return
     }
 
     const entry = {
       ...data,
-      owner: lockedRole
+      owner: role
     }
 
     if (index !== undefined) {
@@ -86,9 +87,8 @@ export default function NegativeEntry() {
       <Typography variant="h4" gutterBottom>
         🛑 Save a New Security Incident
       </Typography>
-
       <Typography variant="body1" gutterBottom>
-        Fill in details of the incident. You may update it later in the Incident Log.
+        Use this form to describe the incident. You can update it later in the Incident Log.
       </Typography>
 
       <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 4 }}>

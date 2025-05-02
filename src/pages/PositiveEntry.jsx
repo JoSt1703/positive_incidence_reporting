@@ -1,7 +1,7 @@
 import { useForm, Controller } from 'react-hook-form'
 import {
-  Box, Button, TextField, Typography, Alert, MenuItem,
-  Select, InputLabel, FormControl, Paper
+  Box, Button, TextField, Typography, Alert,
+  MenuItem, Select, InputLabel, FormControl
 } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
@@ -11,8 +11,8 @@ export default function PositiveEntry() {
   const navigate = useNavigate()
   const stored = JSON.parse(sessionStorage.getItem('successStories')) || []
 
-  const lockedRole = sessionStorage.getItem('role') || 'viewer'
-  const isViewer = lockedRole === 'viewer'
+  const role = sessionStorage.getItem('role') || 'viewer'
+  const isViewer = role === 'viewer'
 
   const { handleSubmit, register, reset, watch, control } = useForm({
     defaultValues: {
@@ -33,14 +33,14 @@ export default function PositiveEntry() {
   }, [index, reset])
 
   const onSubmit = (data) => {
-    if (lockedRole === 'viewer' && data.visibility !== 'public') {
+    if (role === 'viewer' && data.visibility !== 'public') {
       alert('Global Viewer can only submit public stories.')
       return
     }
 
     const entry = {
       ...data,
-      owner: lockedRole
+      owner: role
     }
 
     if (index !== undefined) {
@@ -61,14 +61,12 @@ export default function PositiveEntry() {
       <Typography variant="h4" gutterBottom>
         🛡️ Submit a Success Story
       </Typography>
-
-
       <Typography gutterBottom>
-        Enter as much information as you can — every entry can be updated later in the Event Log.
+        Enter a new positive cybersecurity event. Every entry can be updated later in the Event Log.
       </Typography>
 
       <Alert severity="info" sx={{ mb: 2 }}>
-        <strong>Examples:</strong> MFA rollout, phishing awareness training, or successful early threat detection.
+        <strong>Examples:</strong> MFA rollout, phishing workshop, early threat detection.
       </Alert>
 
       <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>

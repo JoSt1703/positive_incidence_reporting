@@ -8,6 +8,7 @@ import {
   MenuItem, Select, FormControl, InputLabel
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
+
 import Home from './pages/Home'
 import NegativeEntry from './pages/NegativeEntry'
 import NegativeViewEdit from './pages/NegativeViewEdit'
@@ -33,7 +34,11 @@ export default function App() {
   const [role, setRole] = useState(() => sessionStorage.getItem('role') || 'viewer')
   const location = useLocation()
 
-  const isEditPage = /^\/(positive-)?edit\/\d+$/.test(location.pathname)
+  // Allow switching roles only on log/home pages
+  const allowRoleSwitch =
+    location.pathname === '/' ||
+    location.pathname === '/positive-view' ||
+    location.pathname === '/negative-view'
 
   useEffect(() => {
     if (!sessionStorage.getItem('role')) {
@@ -52,8 +57,7 @@ export default function App() {
 
   const drawerContent = (
     <Box>
-      {/* Role Switcher (hidden on edit pages) */}
-      {!isEditPage && (
+      {allowRoleSwitch && (
         <Box sx={{ p: 2 }}>
           <FormControl fullWidth size="small">
             <InputLabel>User Role</InputLabel>
@@ -89,7 +93,6 @@ export default function App() {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      {/* Top AppBar for mobile */}
       {isMobile && (
         <AppBar position="fixed" sx={{ zIndex: theme.zIndex.drawer + 1 }}>
           <Toolbar>
@@ -108,7 +111,6 @@ export default function App() {
         </AppBar>
       )}
 
-      {/* Sidebar */}
       <Drawer
         variant={isMobile ? 'temporary' : 'permanent'}
         open={isMobile ? mobileOpen : true}
@@ -127,7 +129,6 @@ export default function App() {
         {drawerContent}
       </Drawer>
 
-      {/* Main content */}
       <Box
         component="main"
         sx={{
@@ -147,11 +148,11 @@ export default function App() {
           <Route path="/negative-entry" element={<NegativeEntry />} />
           <Route path="/edit/:index" element={<NegativeEntry />} />
           <Route path="/negative-view" element={<NegativeViewEdit />} />
+          <Route path="/negative-view/:index" element={<NegativeReadOnly />} />
           <Route path="/positive-entry" element={<PositiveEntry />} />
           <Route path="/positive-edit/:index" element={<PositiveEntry />} />
           <Route path="/positive-view" element={<PositiveViewEdit />} />
           <Route path="/positive-view/:index" element={<PositiveReadOnly />} />
-          <Route path="/negative-view/:index" element={<NegativeReadOnly />} />
         </Routes>
       </Box>
     </Box>
