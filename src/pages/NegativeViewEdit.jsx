@@ -31,15 +31,16 @@ export default function NegativeViewEdit() {
     return () => window.removeEventListener('storage', load)
   }, [])
 
+  const isViewer = role === 'viewer'
+
   const handleEdit = (index) => {
     navigate(`/edit/${index}`)
   }
 
   const handleDelete = (index) => {
     const all = JSON.parse(sessionStorage.getItem('incidents')) || []
-    const visible = incidents
     const realIndex = all.findIndex(
-      (item) => item.summary === visible[index].summary && item.owner === visible[index].owner
+      (item) => item.summary === incidents[index].summary && item.owner === incidents[index].owner
     )
     if (realIndex !== -1) {
       all.splice(realIndex, 1)
@@ -86,15 +87,15 @@ export default function NegativeViewEdit() {
                   <TableCell>{incident.visibility}</TableCell>
                   <TableCell>
                     <Stack spacing={1} direction="row">
-                      {(incident.owner === role) && (
-                        <Button variant="outlined" size="small" onClick={() => handleEdit(index)}>
-                          Edit
-                        </Button>
-                      )}
-                      {(incident.owner === role) && (
-                        <Button variant="outlined" size="small" color="error" onClick={() => handleDelete(index)}>
-                          Delete
-                        </Button>
+                      {!isViewer && incident.owner === role && (
+                        <>
+                          <Button variant="outlined" size="small" onClick={() => handleEdit(index)}>
+                            Edit
+                          </Button>
+                          <Button variant="outlined" size="small" color="error" onClick={() => handleDelete(index)}>
+                            Delete
+                          </Button>
+                        </>
                       )}
                       <Button variant="outlined" size="small" onClick={() => handleDownloadOne(incident, index)}>
                         ⬇️ JSON

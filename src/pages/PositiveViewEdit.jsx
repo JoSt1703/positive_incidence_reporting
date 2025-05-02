@@ -1,9 +1,28 @@
 import { useState, useEffect } from 'react'
 import {
-  Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  Paper, Button, Stack
+  Box, Typography, Table, TableBody, TableCell, TableContainer,
+  TableHead, TableRow, Paper, Button, Stack
 } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
+
+const EXAMPLE_STORIES = [
+  {
+    date: '2024-08-01',
+    summary: 'Rolled out company-wide MFA enforcement.',
+    detailed_info: 'Implemented MFA with hardware tokens.',
+    industry: 'Technology',
+    visibility: 'public',
+    owner: 'accountA'
+  },
+  {
+    date: '2024-06-15',
+    summary: 'Phishing workshop success.',
+    detailed_info: '85% follow-up training completed.',
+    industry: 'Finance',
+    visibility: 'public',
+    owner: 'accountB'
+  }
+]
 
 export default function PositiveViewEdit() {
   const [stories, setStories] = useState([])
@@ -12,16 +31,16 @@ export default function PositiveViewEdit() {
 
   useEffect(() => {
     const load = () => {
-      const stored = JSON.parse(sessionStorage.getItem('successStories')) || []
+      const all = JSON.parse(sessionStorage.getItem('successStories')) || []
       const currentRole = sessionStorage.getItem('role') || 'viewer'
-      const filtered = stored.filter((story) => {
+      const filtered = all.filter((story) => {
         if (currentRole === 'viewer') return story.visibility === 'public'
         if (story.owner === currentRole) return true
         if (story.visibility === 'shared' && (story.sharedWith || []).includes(currentRole)) return true
         return story.visibility === 'public'
       })
-      setRole(currentRole)
       setStories(filtered)
+      setRole(currentRole)
     }
 
     load()
@@ -29,14 +48,17 @@ export default function PositiveViewEdit() {
     return () => window.removeEventListener('storage', load)
   }, [])
 
+  const isViewer = role === 'viewer'
+
   const handleEdit = (index) => {
     navigate(`/positive-edit/${index}`)
   }
 
   const handleDelete = (index) => {
     const all = JSON.parse(sessionStorage.getItem('successStories')) || []
-    const visible = stories
-    const realIndex = all.findIndex((item) => item.summary === visible[index].summary && item.owner === visible[index].owner)
+    const realIndex = all.findIndex(
+      (item) => item.summary === stories[index].summary && item.owner === stories[index].owner
+    )
     if (realIndex !== -1) {
       all.splice(realIndex, 1)
       sessionStorage.setItem('successStories', JSON.stringify(all))
@@ -58,7 +80,7 @@ export default function PositiveViewEdit() {
   return (
     <Box sx={{ maxWidth: 900, mx: 'auto', mt: 4 }}>
       <Typography variant="h4" gutterBottom>
-        📗 Event Log ({role})
+        📗 Story Log ({role})
       </Typography>
 
       {stories.length === 0 ? (
@@ -82,15 +104,15 @@ export default function PositiveViewEdit() {
                   <TableCell>{story.visibility}</TableCell>
                   <TableCell>
                     <Stack spacing={1} direction="row">
-                      {(story.owner === role) && (
-                        <Button variant="outlined" size="small" onClick={() => handleEdit(index)}>
-                          Edit
-                        </Button>
-                      )}
-                      {(story.owner === role) && (
-                        <Button variant="outlined" size="small" color="error" onClick={() => handleDelete(index)}>
-                          Delete
-                        </Button>
+                      {!isViewer && story.owner === role && (
+                        <>
+                          <Button variant="outlined" size="small" onClick={() => handleEdit(index)}>
+                            Edit
+                          </Button>
+                          <Button variant="outlined" size="small" color="error" onClick={() => handleDelete(index)}>
+                            Delete
+                          </Button>
+                        </>
                       )}
                       <Button variant="outlined" size="small" onClick={() => handleDownloadOne(story, index)}>
                         ⬇️ JSON

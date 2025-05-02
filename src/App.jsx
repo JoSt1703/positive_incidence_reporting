@@ -18,7 +18,7 @@ const drawerWidth = 240
 
 const navItems = [
   { path: '/', label: '🏠 Home' },
-  { path: '/positive-entry', label: '🛡️ Stroy Reporting' },
+  { path: '/positive-entry', label: '🛡️ Story Reporting' },
   { path: '/positive-view', label: '📗 Story Log' },
   { path: '/negative-entry', label: '🛑 Incidence Reporting' },
   { path: '/negative-view', label: '📕 Incidence Log' }
@@ -53,10 +53,10 @@ export default function App() {
         <FormControl fullWidth size="small">
           <InputLabel>User Role</InputLabel>
           <Select value={role} label="User Role" onChange={(e) => setRole(e.target.value)}>
+            <MenuItem value="viewer">Global Viewer</MenuItem>
             <MenuItem value="accountA">Account A</MenuItem>
             <MenuItem value="accountB">Account B</MenuItem>
             <MenuItem value="accountC">Account C</MenuItem>
-            <MenuItem value="viewer">Global Viewer</MenuItem>
           </Select>
         </FormControl>
       </Box>

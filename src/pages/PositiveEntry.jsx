@@ -1,7 +1,7 @@
 import { useForm, Controller } from 'react-hook-form'
 import {
-  Box, Button, TextField, Typography, Alert, MenuItem, Select,
-  InputLabel, FormControl
+  Box, Button, TextField, Typography, Alert,
+  MenuItem, Select, InputLabel, FormControl
 } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
@@ -10,7 +10,9 @@ export default function PositiveEntry() {
   const { index } = useParams()
   const navigate = useNavigate()
   const stored = JSON.parse(sessionStorage.getItem('successStories')) || []
-  const role = sessionStorage.getItem('role') || 'accountA'
+
+  const role = sessionStorage.getItem('role') || 'viewer'
+  const isViewer = role === 'viewer'
 
   const { handleSubmit, register, reset, watch, control } = useForm({
     defaultValues: {
@@ -19,7 +21,7 @@ export default function PositiveEntry() {
       detailed_info: '',
       industry: '',
       category: '',
-      visibility: 'private',
+      visibility: 'public',
       sharedWith: []
     }
   })
@@ -31,23 +33,28 @@ export default function PositiveEntry() {
   }, [index, reset])
 
   const onSubmit = (data) => {
-    const newEntry = {
+    if (isViewer) {
+      alert('Global Viewer cannot create or modify entries.')
+      return
+    }
+
+    const entry = {
       ...data,
-      visibility: data.visibility || 'private',
-      owner: role,
-      sharedWith: data.sharedWith || []
+      owner: role
     }
 
     if (index !== undefined) {
-      stored[parseInt(index)] = newEntry
+      stored[parseInt(index)] = entry
     } else {
-      stored.push(newEntry)
+      stored.push(entry)
     }
+
     sessionStorage.setItem('successStories', JSON.stringify(stored))
     navigate('/positive-view')
   }
 
   const summary = watch('summary') || ''
+  const visibility = watch('visibility')
 
   return (
     <Box sx={{ maxWidth: 800, mx: 'auto' }}>
@@ -100,6 +107,7 @@ export default function PositiveEntry() {
           margin="normal"
         />
 
+        {/* Category Dropdown */}
         <FormControl fullWidth margin="normal">
           <InputLabel>Category</InputLabel>
           <Select
@@ -123,29 +131,31 @@ export default function PositiveEntry() {
           </Select>
         </FormControl>
 
+        {/* Visibility */}
         <FormControl fullWidth margin="normal">
           <InputLabel>Visibility</InputLabel>
           <Controller
             name="visibility"
             control={control}
             render={({ field }) => (
-              <Select {...field} label="Visibility">
-                <MenuItem value="private">Private</MenuItem>
-                <MenuItem value="shared">Shared with another account</MenuItem>
+              <Select {...field} label="Visibility" disabled={isViewer}>
                 <MenuItem value="public">Public</MenuItem>
+                {!isViewer && <MenuItem value="shared">Shared</MenuItem>}
+                {!isViewer && <MenuItem value="private">Private</MenuItem>}
               </Select>
             )}
           />
         </FormControl>
 
-        {watch('visibility') === 'shared' && (
+        {/* SharedWith (only if shared and not viewer) */}
+        {visibility === 'shared' && !isViewer && (
           <FormControl fullWidth margin="normal">
             <InputLabel>Share with</InputLabel>
             <Controller
               name="sharedWith"
               control={control}
               render={({ field }) => (
-                <Select {...field} multiple>
+                <Select {...field} multiple label="Share with">
                   <MenuItem value="accountA">Account A</MenuItem>
                   <MenuItem value="accountB">Account B</MenuItem>
                   <MenuItem value="accountC">Account C</MenuItem>
@@ -156,7 +166,7 @@ export default function PositiveEntry() {
         )}
 
         <Box sx={{ mt: 2 }}>
-          <Button type="submit" variant="contained">
+          <Button type="submit" variant="contained" disabled={isViewer}>
             Save Story
           </Button>
         </Box>

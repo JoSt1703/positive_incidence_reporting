@@ -14,16 +14,38 @@ export default function NegativeEntry() {
   const { index } = useParams()
   const navigate = useNavigate()
   const stored = JSON.parse(sessionStorage.getItem('incidents')) || []
-  const role = sessionStorage.getItem('role') || 'accountA'
+
+  const role = sessionStorage.getItem('role') || 'viewer'
+  const isViewer = role === 'viewer'
 
   const { handleSubmit, control, watch, reset } = useForm({
     defaultValues: {
-      status: '', summary: '', reference: '', confidence: '', impact: '',
-      incidentOccurred: '', compromise: '', exfiltration: '', discovery: '', containment: '',
-      targeted: '', industry: '', country: '', companySize: '',
-      actions: [], actionNotes: '', actors: [], actorNotes: '', totalDamage: '',
-      assetHosting: [], assetVariety: [], discoveryInternal: [], discoveryExternal: [], discoveryPartner: [],
-      visibility: 'private', sharedWith: []
+      status: '',
+      summary: '',
+      reference: '',
+      confidence: '',
+      impact: '',
+      incidentOccurred: '',
+      compromise: '',
+      exfiltration: '',
+      discovery: '',
+      containment: '',
+      targeted: '',
+      industry: '',
+      country: '',
+      companySize: '',
+      actions: [],
+      actionNotes: '',
+      actors: [],
+      actorNotes: '',
+      totalDamage: '',
+      assetHosting: [],
+      assetVariety: [],
+      discoveryInternal: [],
+      discoveryExternal: [],
+      discoveryPartner: [],
+      visibility: 'public',
+      sharedWith: []
     }
   })
 
@@ -34,11 +56,14 @@ export default function NegativeEntry() {
   }, [index, reset])
 
   const onSubmit = (data) => {
+    if (isViewer) {
+      alert('Global Viewer cannot create or modify incidents.')
+      return
+    }
+
     const entry = {
       ...data,
-      visibility: data.visibility || 'private',
-      owner: role,
-      sharedWith: data.sharedWith || []
+      owner: role
     }
 
     if (index !== undefined) {
@@ -50,6 +75,8 @@ export default function NegativeEntry() {
     sessionStorage.setItem('incidents', JSON.stringify(stored))
     navigate('/negative-view')
   }
+
+  const visibility = watch('visibility')
 
   return (
     <Box sx={{ maxWidth: 800, mx: 'auto' }}>
@@ -70,29 +97,31 @@ export default function NegativeEntry() {
         <AssetSection control={control} watch={watch} />
         <DiscoverySection control={control} watch={watch} />
 
+        {/* Visibility Dropdown */}
         <FormControl fullWidth margin="normal">
-          <InputLabel id="visibility-label">Visibility</InputLabel>
+          <InputLabel>Visibility</InputLabel>
           <Controller
             name="visibility"
             control={control}
             render={({ field }) => (
-              <Select {...field} labelId="visibility-label" label="Visibility">
-                <MenuItem value="private">Private</MenuItem>
-                <MenuItem value="shared">Shared with another account</MenuItem>
+              <Select {...field} label="Visibility" disabled={isViewer}>
                 <MenuItem value="public">Public</MenuItem>
+                {!isViewer && <MenuItem value="shared">Shared</MenuItem>}
+                {!isViewer && <MenuItem value="private">Private</MenuItem>}
               </Select>
             )}
           />
         </FormControl>
 
-        {watch('visibility') === 'shared' && (
+        {/* Shared With */}
+        {visibility === 'shared' && !isViewer && (
           <FormControl fullWidth margin="normal">
-            <InputLabel id="share-with-label">Share with</InputLabel>
+            <InputLabel>Share with</InputLabel>
             <Controller
               name="sharedWith"
               control={control}
               render={({ field }) => (
-                <Select {...field} multiple labelId="share-with-label" label="Share with">
+                <Select {...field} multiple label="Share with">
                   <MenuItem value="accountA">Account A</MenuItem>
                   <MenuItem value="accountB">Account B</MenuItem>
                   <MenuItem value="accountC">Account C</MenuItem>
@@ -103,7 +132,7 @@ export default function NegativeEntry() {
         )}
 
         <Box sx={{ mt: 3 }}>
-          <Button variant="contained" type="submit">
+          <Button variant="contained" type="submit" disabled={isViewer}>
             Save Incident
           </Button>
         </Box>
