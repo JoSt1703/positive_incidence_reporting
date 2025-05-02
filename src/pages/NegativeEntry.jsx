@@ -56,25 +56,26 @@ export default function NegativeEntry() {
   }, [index, reset])
 
   const onSubmit = (data) => {
-    if (isViewer) {
-      alert('Global Viewer cannot create or modify incidents.')
+    if (role === 'viewer' && data.visibility !== 'public') {
+      alert('Global Viewer can only submit public incidents.')
       return
     }
-
+  
     const entry = {
       ...data,
       owner: role
     }
-
+  
     if (index !== undefined) {
       stored[parseInt(index)] = entry
     } else {
       stored.push(entry)
     }
-
+  
     sessionStorage.setItem('incidents', JSON.stringify(stored))
     navigate('/negative-view')
   }
+  
 
   const visibility = watch('visibility')
 
@@ -132,8 +133,8 @@ export default function NegativeEntry() {
         )}
 
         <Box sx={{ mt: 3 }}>
-          <Button variant="contained" type="submit" disabled={isViewer}>
-            Save Incident
+          <Button type="submit" variant="contained">
+            Save Story
           </Button>
         </Box>
       </Box>

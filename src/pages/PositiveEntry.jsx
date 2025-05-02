@@ -33,25 +33,26 @@ export default function PositiveEntry() {
   }, [index, reset])
 
   const onSubmit = (data) => {
-    if (isViewer) {
-      alert('Global Viewer cannot create or modify entries.')
+    if (role === 'viewer' && data.visibility !== 'public') {
+      alert('Global Viewer can only submit public stories.')
       return
     }
-
+  
     const entry = {
       ...data,
       owner: role
     }
-
+  
     if (index !== undefined) {
       stored[parseInt(index)] = entry
     } else {
       stored.push(entry)
     }
-
+  
     sessionStorage.setItem('successStories', JSON.stringify(stored))
     navigate('/positive-view')
   }
+  
 
   const summary = watch('summary') || ''
   const visibility = watch('visibility')
@@ -166,7 +167,7 @@ export default function PositiveEntry() {
         )}
 
         <Box sx={{ mt: 2 }}>
-          <Button type="submit" variant="contained" disabled={isViewer}>
+          <Button type="submit" variant="contained">
             Save Story
           </Button>
         </Box>
