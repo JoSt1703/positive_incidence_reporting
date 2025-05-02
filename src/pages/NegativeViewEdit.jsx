@@ -1,14 +1,26 @@
 import { useState, useEffect } from 'react'
-import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Stack } from '@mui/material'
+import {
+  Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
+  Paper, Button, Stack
+} from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
 export default function NegativeViewEdit() {
   const [incidents, setIncidents] = useState([])
+  const [role, setRole] = useState('viewer')
   const navigate = useNavigate()
 
   useEffect(() => {
     const stored = JSON.parse(sessionStorage.getItem('incidents')) || []
-    setIncidents(stored)
+    const currentRole = sessionStorage.getItem('role') || 'viewer'
+    const filtered = stored.filter((incident) => {
+      if (currentRole === 'viewer') return incident.visibility === 'public'
+      if (incident.owner === currentRole) return true
+      if (incident.visibility === 'shared' && (incident.sharedWith || []).includes(currentRole)) return true
+      return incident.visibility === 'public'
+    })
+    setRole(currentRole)
+    setIncidents(filtered)
   }, [])
 
   const handleEdit = (index) => {
@@ -16,10 +28,14 @@ export default function NegativeViewEdit() {
   }
 
   const handleDelete = (index) => {
-    const updated = [...incidents]
-    updated.splice(index, 1)
-    setIncidents(updated)
-    sessionStorage.setItem('incidents', JSON.stringify(updated))
+    const all = JSON.parse(sessionStorage.getItem('incidents')) || []
+    const visible = incidents
+    const realIndex = all.findIndex((item) => item.summary === visible[index].summary && item.owner === visible[index].owner)
+    if (realIndex !== -1) {
+      all.splice(realIndex, 1)
+      sessionStorage.setItem('incidents', JSON.stringify(all))
+      setIncidents((prev) => prev.filter((_, i) => i !== index))
+    }
   }
 
   const handleDownloadOne = (incident, index) => {
@@ -36,11 +52,11 @@ export default function NegativeViewEdit() {
   return (
     <Box sx={{ maxWidth: 900, mx: 'auto', mt: 4 }}>
       <Typography variant="h4" gutterBottom>
-      📕 Incident Log
+        📕 Incident Log ({role})
       </Typography>
 
       {incidents.length === 0 ? (
-        <Typography>No incidents saved yet.</Typography>
+        <Typography>No incidents available for this view.</Typography>
       ) : (
         <TableContainer component={Paper}>
           <Table>
@@ -48,6 +64,7 @@ export default function NegativeViewEdit() {
               <TableRow>
                 <TableCell>Status</TableCell>
                 <TableCell>Summary</TableCell>
+                <TableCell>Visibility</TableCell>
                 <TableCell>Options</TableCell>
               </TableRow>
             </TableHead>
@@ -56,14 +73,19 @@ export default function NegativeViewEdit() {
                 <TableRow key={index}>
                   <TableCell>{incident.status}</TableCell>
                   <TableCell>{incident.summary}</TableCell>
+                  <TableCell>{incident.visibility}</TableCell>
                   <TableCell>
                     <Stack spacing={1} direction="row">
-                      <Button variant="outlined" size="small" onClick={() => handleEdit(index)}>
-                        Edit
-                      </Button>
-                      <Button variant="outlined" size="small" color="error" onClick={() => handleDelete(index)}>
-                        Delete
-                      </Button>
+                      {(incident.owner === role) && (
+                        <Button variant="outlined" size="small" onClick={() => handleEdit(index)}>
+                          Edit
+                        </Button>
+                      )}
+                      {(incident.owner === role) && (
+                        <Button variant="outlined" size="small" color="error" onClick={() => handleDelete(index)}>
+                          Delete
+                        </Button>
+                      )}
                       <Button variant="outlined" size="small" onClick={() => handleDownloadOne(incident, index)}>
                         ⬇️ JSON
                       </Button>

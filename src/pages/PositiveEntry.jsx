@@ -1,6 +1,8 @@
-// /pages/PositiveEntry.jsx
-import { useForm } from 'react-hook-form'
-import { Box, Button, TextField, Typography, Alert, MenuItem, Select, InputLabel, FormControl } from '@mui/material'
+import { useForm, Controller } from 'react-hook-form'
+import {
+  Box, Button, TextField, Typography, Alert, MenuItem, Select,
+  InputLabel, FormControl
+} from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 
@@ -8,14 +10,17 @@ export default function PositiveEntry() {
   const { index } = useParams()
   const navigate = useNavigate()
   const stored = JSON.parse(sessionStorage.getItem('successStories')) || []
+  const role = sessionStorage.getItem('role') || 'accountA'
 
-  const { handleSubmit, register, reset, watch } = useForm({
+  const { handleSubmit, register, reset, watch, control } = useForm({
     defaultValues: {
       date: '',
       summary: '',
       detailed_info: '',
       industry: '',
-      category: ''  // Added field for category
+      category: '',
+      visibility: 'private',
+      sharedWith: []
     }
   })
 
@@ -26,10 +31,17 @@ export default function PositiveEntry() {
   }, [index, reset])
 
   const onSubmit = (data) => {
+    const newEntry = {
+      ...data,
+      visibility: data.visibility || 'private',
+      owner: role,
+      sharedWith: data.sharedWith || []
+    }
+
     if (index !== undefined) {
-      stored[parseInt(index)] = data
+      stored[parseInt(index)] = newEntry
     } else {
-      stored.push(data)
+      stored.push(newEntry)
     }
     sessionStorage.setItem('successStories', JSON.stringify(stored))
     navigate('/positive-view')
@@ -88,7 +100,6 @@ export default function PositiveEntry() {
           margin="normal"
         />
 
-        {/* Category Dropdown */}
         <FormControl fullWidth margin="normal">
           <InputLabel>Category</InputLabel>
           <Select
@@ -111,6 +122,37 @@ export default function PositiveEntry() {
             <MenuItem value="Regulatory Advocacy">Regulatory Advocacy</MenuItem>
           </Select>
         </FormControl>
+
+        <FormControl fullWidth margin="normal">
+          <InputLabel>Visibility</InputLabel>
+          <Controller
+            name="visibility"
+            control={control}
+            render={({ field }) => (
+              <Select {...field} label="Visibility">
+                <MenuItem value="private">Private</MenuItem>
+                <MenuItem value="shared">Shared with another account</MenuItem>
+                <MenuItem value="public">Public</MenuItem>
+              </Select>
+            )}
+          />
+        </FormControl>
+
+        {watch('visibility') === 'shared' && (
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Share with</InputLabel>
+            <Controller
+              name="sharedWith"
+              control={control}
+              render={({ field }) => (
+                <Select {...field} multiple>
+                  <MenuItem value="accountA">Account A</MenuItem>
+                  <MenuItem value="accountB">Account B</MenuItem>
+                </Select>
+              )}
+            />
+          </FormControl>
+        )}
 
         <Box sx={{ mt: 2 }}>
           <Button type="submit" variant="contained">

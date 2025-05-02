@@ -1,41 +1,26 @@
-// /pages/PositiveViewEdit.jsx
 import { useState, useEffect } from 'react'
-import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Stack } from '@mui/material'
+import {
+  Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
+  Paper, Button, Stack
+} from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-
-const EXAMPLE_STORIES = [
-  {
-    date: '2024-08-01',
-    summary: 'Rolled out company-wide MFA enforcement.',
-    detailed_info: 'Successfully implemented multi-factor authentication across all departments using hardware tokens.',
-    industry: 'Technology'
-  },
-  {
-    date: '2024-06-15',
-    summary: 'Conducted phishing workshop with high engagement.',
-    detailed_info: 'Led a live phishing simulation workshop. 85% of employees completed follow-up training.',
-    industry: 'Finance'
-  },
-  {
-    date: '2024-07-10',
-    summary: 'Completed pen test with minimal findings.',
-    detailed_info: 'External firm found only low-priority misconfigurations during penetration testing.',
-    industry: 'Healthcare'
-  }
-]
 
 export default function PositiveViewEdit() {
   const [stories, setStories] = useState([])
+  const [role, setRole] = useState('viewer')
   const navigate = useNavigate()
 
   useEffect(() => {
-    const stored = JSON.parse(sessionStorage.getItem('successStories'))
-    if (!stored || stored.length === 0) {
-      sessionStorage.setItem('successStories', JSON.stringify(EXAMPLE_STORIES))
-      setStories(EXAMPLE_STORIES)
-    } else {
-      setStories(stored)
-    }
+    const stored = JSON.parse(sessionStorage.getItem('successStories')) || []
+    const currentRole = sessionStorage.getItem('role') || 'viewer'
+    const filtered = stored.filter((story) => {
+      if (currentRole === 'viewer') return story.visibility === 'public'
+      if (story.owner === currentRole) return true
+      if (story.visibility === 'shared' && (story.sharedWith || []).includes(currentRole)) return true
+      return story.visibility === 'public'
+    })
+    setRole(currentRole)
+    setStories(filtered)
   }, [])
 
   const handleEdit = (index) => {
@@ -43,10 +28,14 @@ export default function PositiveViewEdit() {
   }
 
   const handleDelete = (index) => {
-    const updated = [...stories]
-    updated.splice(index, 1)
-    setStories(updated)
-    sessionStorage.setItem('successStories', JSON.stringify(updated))
+    const all = JSON.parse(sessionStorage.getItem('successStories')) || []
+    const visible = stories
+    const realIndex = all.findIndex((item) => item.summary === visible[index].summary && item.owner === visible[index].owner)
+    if (realIndex !== -1) {
+      all.splice(realIndex, 1)
+      sessionStorage.setItem('successStories', JSON.stringify(all))
+      setStories((prev) => prev.filter((_, i) => i !== index))
+    }
   }
 
   const handleDownloadOne = (story, index) => {
@@ -63,11 +52,11 @@ export default function PositiveViewEdit() {
   return (
     <Box sx={{ maxWidth: 900, mx: 'auto', mt: 4 }}>
       <Typography variant="h4" gutterBottom>
-        📗 Event Log
+        📗 Event Log ({role})
       </Typography>
 
       {stories.length === 0 ? (
-        <Typography>No stories submitted yet.</Typography>
+        <Typography>No stories available for this view.</Typography>
       ) : (
         <TableContainer component={Paper}>
           <Table>
@@ -75,6 +64,7 @@ export default function PositiveViewEdit() {
               <TableRow>
                 <TableCell>Date</TableCell>
                 <TableCell>Summary</TableCell>
+                <TableCell>Visibility</TableCell>
                 <TableCell>Options</TableCell>
               </TableRow>
             </TableHead>
@@ -83,14 +73,19 @@ export default function PositiveViewEdit() {
                 <TableRow key={index}>
                   <TableCell>{story.date}</TableCell>
                   <TableCell>{story.summary}</TableCell>
+                  <TableCell>{story.visibility}</TableCell>
                   <TableCell>
                     <Stack spacing={1} direction="row">
-                      <Button variant="outlined" size="small" onClick={() => handleEdit(index)}>
-                        Edit
-                      </Button>
-                      <Button variant="outlined" size="small" color="error" onClick={() => handleDelete(index)}>
-                        Delete
-                      </Button>
+                      {(story.owner === role) && (
+                        <Button variant="outlined" size="small" onClick={() => handleEdit(index)}>
+                          Edit
+                        </Button>
+                      )}
+                      {(story.owner === role) && (
+                        <Button variant="outlined" size="small" color="error" onClick={() => handleDelete(index)}>
+                          Delete
+                        </Button>
+                      )}
                       <Button variant="outlined" size="small" onClick={() => handleDownloadOne(story, index)}>
                         ⬇️ JSON
                       </Button>

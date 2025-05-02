@@ -1,6 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
-import { Box, Drawer, List, ListItem, ListItemText, Typography, useMediaQuery, useTheme, IconButton, AppBar, Toolbar } from '@mui/material'
+import {
+  Box, Drawer, List, ListItem, ListItemText, Typography,
+  useMediaQuery, useTheme, IconButton, AppBar, Toolbar, Select, MenuItem
+} from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import Home from './pages/Home'
 import NegativeEntry from './pages/NegativeEntry'
@@ -12,9 +15,9 @@ const drawerWidth = 240
 
 const navItems = [
   { path: '/', label: '🏠 Home' },
-  { path: '/positive-entry', label: '🛡️ Event Reporting' },
+  { path: '/positive-entry', label: '🛡️ Stroy Reporting' },
+  { path: '/positive-view', label: '📗 Story Log' },
   { path: '/negative-entry', label: '🛑 Incidence Reporting' },
-  { path: '/positive-view', label: '📗 Event Log' },
   { path: '/negative-view', label: '📕 Incidence Log' }
 ]
 
@@ -22,6 +25,11 @@ export default function App() {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [role, setRole] = useState(() => sessionStorage.getItem('role') || 'viewer')
+
+  useEffect(() => {
+    sessionStorage.setItem('role', role)
+  }, [role])
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
@@ -30,9 +38,12 @@ export default function App() {
   const drawerContent = (
     <Box>
       <Box sx={{ p: 2 }}>
-        <Typography variant="h6" noWrap>
-          Menu
-        </Typography>
+        <Typography variant="h6" noWrap>Menu</Typography>
+        <Select value={role} onChange={(e) => setRole(e.target.value)} size="small" fullWidth>
+          <MenuItem value="accountA">Account A</MenuItem>
+          <MenuItem value="accountB">Account B</MenuItem>
+          <MenuItem value="viewer">Global Viewer</MenuItem>
+        </Select>
       </Box>
       <List>
         {navItems.map((item) => (
@@ -52,7 +63,6 @@ export default function App() {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      {/* Top AppBar for mobile */}
       {isMobile && (
         <AppBar position="fixed" sx={{ zIndex: theme.zIndex.drawer + 1 }}>
           <Toolbar>
@@ -71,7 +81,6 @@ export default function App() {
         </AppBar>
       )}
 
-      {/* Sidebar */}
       <Drawer
         variant={isMobile ? 'temporary' : 'permanent'}
         open={isMobile ? mobileOpen : true}
@@ -90,7 +99,6 @@ export default function App() {
         {drawerContent}
       </Drawer>
 
-      {/* Main content */}
       <Box
         component="main"
         sx={{
