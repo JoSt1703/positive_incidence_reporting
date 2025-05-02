@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import {
-  Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  Paper, Button, Stack
+  Box, Typography, Table, TableBody, TableCell, TableContainer,
+  TableHead, TableRow, Paper, Button, Stack
 } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
@@ -11,16 +11,24 @@ export default function NegativeViewEdit() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const stored = JSON.parse(sessionStorage.getItem('incidents')) || []
-    const currentRole = sessionStorage.getItem('role') || 'viewer'
-    const filtered = stored.filter((incident) => {
-      if (currentRole === 'viewer') return incident.visibility === 'public'
-      if (incident.owner === currentRole) return true
-      if (incident.visibility === 'shared' && (incident.sharedWith || []).includes(currentRole)) return true
-      return incident.visibility === 'public'
-    })
-    setRole(currentRole)
-    setIncidents(filtered)
+    const load = () => {
+      const all = JSON.parse(sessionStorage.getItem('incidents')) || []
+      const currentRole = sessionStorage.getItem('role') || 'viewer'
+
+      const filtered = all.filter((incident) => {
+        if (currentRole === 'viewer') return incident.visibility === 'public'
+        if (incident.owner === currentRole) return true
+        if (incident.visibility === 'shared' && (incident.sharedWith || []).includes(currentRole)) return true
+        return incident.visibility === 'public'
+      })
+
+      setRole(currentRole)
+      setIncidents(filtered)
+    }
+
+    load()
+    window.addEventListener('storage', load)
+    return () => window.removeEventListener('storage', load)
   }, [])
 
   const handleEdit = (index) => {
@@ -30,7 +38,9 @@ export default function NegativeViewEdit() {
   const handleDelete = (index) => {
     const all = JSON.parse(sessionStorage.getItem('incidents')) || []
     const visible = incidents
-    const realIndex = all.findIndex((item) => item.summary === visible[index].summary && item.owner === visible[index].owner)
+    const realIndex = all.findIndex(
+      (item) => item.summary === visible[index].summary && item.owner === visible[index].owner
+    )
     if (realIndex !== -1) {
       all.splice(realIndex, 1)
       sessionStorage.setItem('incidents', JSON.stringify(all))

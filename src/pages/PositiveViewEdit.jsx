@@ -11,16 +11,22 @@ export default function PositiveViewEdit() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const stored = JSON.parse(sessionStorage.getItem('successStories')) || []
-    const currentRole = sessionStorage.getItem('role') || 'viewer'
-    const filtered = stored.filter((story) => {
-      if (currentRole === 'viewer') return story.visibility === 'public'
-      if (story.owner === currentRole) return true
-      if (story.visibility === 'shared' && (story.sharedWith || []).includes(currentRole)) return true
-      return story.visibility === 'public'
-    })
-    setRole(currentRole)
-    setStories(filtered)
+    const load = () => {
+      const stored = JSON.parse(sessionStorage.getItem('successStories')) || []
+      const currentRole = sessionStorage.getItem('role') || 'viewer'
+      const filtered = stored.filter((story) => {
+        if (currentRole === 'viewer') return story.visibility === 'public'
+        if (story.owner === currentRole) return true
+        if (story.visibility === 'shared' && (story.sharedWith || []).includes(currentRole)) return true
+        return story.visibility === 'public'
+      })
+      setRole(currentRole)
+      setStories(filtered)
+    }
+
+    load()
+    window.addEventListener('storage', load)
+    return () => window.removeEventListener('storage', load)
   }, [])
 
   const handleEdit = (index) => {

@@ -1,8 +1,11 @@
-import { useState, useEffect } from 'react'
-import { Routes, Route, Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import {
+  Routes, Route, Link, useLocation
+} from 'react-router-dom'
 import {
   Box, Drawer, List, ListItem, ListItemText, Typography,
-  useMediaQuery, useTheme, IconButton, AppBar, Toolbar, Select, MenuItem
+  useMediaQuery, useTheme, IconButton, AppBar, Toolbar,
+  MenuItem, Select, FormControl, InputLabel
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import Home from './pages/Home'
@@ -25,10 +28,19 @@ export default function App() {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const [mobileOpen, setMobileOpen] = useState(false)
+
   const [role, setRole] = useState(() => sessionStorage.getItem('role') || 'viewer')
+  const location = useLocation()
+
+  useEffect(() => {
+    if (!sessionStorage.getItem('role')) {
+      sessionStorage.setItem('role', 'viewer')
+    }
+  }, [])
 
   useEffect(() => {
     sessionStorage.setItem('role', role)
+    window.dispatchEvent(new Event('storage')) // force update listeners
   }, [role])
 
   const handleDrawerToggle = () => {
@@ -38,12 +50,9 @@ export default function App() {
   const drawerContent = (
     <Box>
       <Box sx={{ p: 2 }}>
-        <Typography variant="h6" noWrap>Menu</Typography>
-        <Select value={role} onChange={(e) => setRole(e.target.value)} size="small" fullWidth>
-          <MenuItem value="accountA">Account A</MenuItem>
-          <MenuItem value="accountB">Account B</MenuItem>
-          <MenuItem value="viewer">Global Viewer</MenuItem>
-        </Select>
+        <Typography variant="h6" noWrap>
+          Menu
+        </Typography>
       </Box>
       <List>
         {navItems.map((item) => (
@@ -52,6 +61,7 @@ export default function App() {
             key={item.path}
             component={Link}
             to={item.path}
+            selected={location.pathname === item.path}
             onClick={() => isMobile && setMobileOpen(false)}
           >
             <ListItemText primary={item.label} />
@@ -63,6 +73,7 @@ export default function App() {
 
   return (
     <Box sx={{ display: 'flex' }}>
+      {/* Top AppBar for mobile */}
       {isMobile && (
         <AppBar position="fixed" sx={{ zIndex: theme.zIndex.drawer + 1 }}>
           <Toolbar>
@@ -74,13 +85,22 @@ export default function App() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap sx={{ ml: 2 }}>
+            <Typography variant="h6" noWrap sx={{ ml: 2, flexGrow: 1 }}>
               Incident Reporting
             </Typography>
+            <FormControl size="small" sx={{ minWidth: 160 }}>
+              <InputLabel>User Role</InputLabel>
+              <Select value={role} label="User Role" onChange={(e) => setRole(e.target.value)}>
+                <MenuItem value="accountA">Account A</MenuItem>
+                <MenuItem value="accountB">Account B</MenuItem>
+                <MenuItem value="viewer">Global Viewer</MenuItem>
+              </Select>
+            </FormControl>
           </Toolbar>
         </AppBar>
       )}
 
+      {/* Sidebar */}
       <Drawer
         variant={isMobile ? 'temporary' : 'permanent'}
         open={isMobile ? mobileOpen : true}
@@ -99,6 +119,7 @@ export default function App() {
         {drawerContent}
       </Drawer>
 
+      {/* Main content */}
       <Box
         component="main"
         sx={{
@@ -109,17 +130,28 @@ export default function App() {
           mt: isMobile ? 7 : 0
         }}
       >
-        <Box sx={{ maxWidth: { xs: '100%', sm: 'calc(100% - 120px)', md: 'calc(100% - 160px)' }, mr: 'auto' }}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/negative-entry" element={<NegativeEntry />} />
-            <Route path="/edit/:index" element={<NegativeEntry />} />
-            <Route path="/negative-view" element={<NegativeViewEdit />} />
-            <Route path="/positive-entry" element={<PositiveEntry />} />
-            <Route path="/positive-edit/:index" element={<PositiveEntry />} />
-            <Route path="/positive-view" element={<PositiveViewEdit />} />
-          </Routes>
-        </Box>
+        {!isMobile && (
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+            <FormControl size="small" sx={{ minWidth: 200 }}>
+              <InputLabel>User Role</InputLabel>
+              <Select value={role} label="User Role" onChange={(e) => setRole(e.target.value)}>
+                <MenuItem value="accountA">Account A</MenuItem>
+                <MenuItem value="accountB">Account B</MenuItem>
+                <MenuItem value="viewer">Global Viewer</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        )}
+
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/negative-entry" element={<NegativeEntry />} />
+          <Route path="/edit/:index" element={<NegativeEntry />} />
+          <Route path="/negative-view" element={<NegativeViewEdit />} />
+          <Route path="/positive-entry" element={<PositiveEntry />} />
+          <Route path="/positive-edit/:index" element={<PositiveEntry />} />
+          <Route path="/positive-view" element={<PositiveViewEdit />} />
+        </Routes>
       </Box>
     </Box>
   )
