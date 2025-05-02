@@ -28,7 +28,6 @@ export default function App() {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const [mobileOpen, setMobileOpen] = useState(false)
-
   const [role, setRole] = useState(() => sessionStorage.getItem('role') || 'viewer')
   const location = useLocation()
 
@@ -40,7 +39,7 @@ export default function App() {
 
   useEffect(() => {
     sessionStorage.setItem('role', role)
-    window.dispatchEvent(new Event('storage')) // force update listeners
+    window.dispatchEvent(new Event('storage'))
   }, [role])
 
   const handleDrawerToggle = () => {
@@ -50,9 +49,7 @@ export default function App() {
   const drawerContent = (
     <Box>
       <Box sx={{ p: 2 }}>
-        <Typography variant="h6" noWrap>
-          Menu
-        </Typography>
+        <Typography variant="h6" noWrap>Menu</Typography>
       </Box>
       <List>
         {navItems.map((item) => (
@@ -68,12 +65,29 @@ export default function App() {
           </ListItem>
         ))}
       </List>
+
+      {/* Role Switcher in Sidebar */}
+      <Box sx={{ p: 2 }}>
+        <FormControl fullWidth size="small">
+          <InputLabel>User Role</InputLabel>
+          <Select
+            value={role}
+            label="User Role"
+            onChange={(e) => setRole(e.target.value)}
+          >
+            <MenuItem value="accountA">Account A</MenuItem>
+            <MenuItem value="accountB">Account B</MenuItem>
+            <MenuItem value="userC">User C</MenuItem>
+            <MenuItem value="viewer">Global Viewer</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
     </Box>
   )
 
   return (
     <Box sx={{ display: 'flex' }}>
-      {/* Top AppBar for mobile */}
+      {/* AppBar for mobile only */}
       {isMobile && (
         <AppBar position="fixed" sx={{ zIndex: theme.zIndex.drawer + 1 }}>
           <Toolbar>
@@ -85,17 +99,9 @@ export default function App() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap sx={{ ml: 2, flexGrow: 1 }}>
+            <Typography variant="h6" noWrap sx={{ ml: 2 }}>
               Incident Reporting
             </Typography>
-            <FormControl size="small" sx={{ minWidth: 160 }}>
-              <InputLabel>User Role</InputLabel>
-              <Select value={role} label="User Role" onChange={(e) => setRole(e.target.value)}>
-                <MenuItem value="accountA">Account A</MenuItem>
-                <MenuItem value="accountB">Account B</MenuItem>
-                <MenuItem value="viewer">Global Viewer</MenuItem>
-              </Select>
-            </FormControl>
           </Toolbar>
         </AppBar>
       )}
@@ -119,30 +125,17 @@ export default function App() {
         {drawerContent}
       </Drawer>
 
-      {/* Main content */}
+      {/* Main Content Area */}
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           p: { xs: 2, sm: 3 },
-          ml: { xs: 0, sm: `${drawerWidth}px` },
+          ml: { sm: `${drawerWidth}px` },
           width: '100%',
           mt: isMobile ? 7 : 0
         }}
       >
-        {!isMobile && (
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
-            <FormControl size="small" sx={{ minWidth: 200 }}>
-              <InputLabel>User Role</InputLabel>
-              <Select value={role} label="User Role" onChange={(e) => setRole(e.target.value)}>
-                <MenuItem value="accountA">Account A</MenuItem>
-                <MenuItem value="accountB">Account B</MenuItem>
-                <MenuItem value="viewer">Global Viewer</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-        )}
-
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/negative-entry" element={<NegativeEntry />} />
