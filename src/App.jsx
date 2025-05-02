@@ -48,7 +48,20 @@ export default function App() {
 
   const drawerContent = (
     <Box>
+      {/* Role Selector at Top */}
       <Box sx={{ p: 2 }}>
+        <FormControl fullWidth size="small">
+          <InputLabel>User Role</InputLabel>
+          <Select value={role} label="User Role" onChange={(e) => setRole(e.target.value)}>
+            <MenuItem value="accountA">Account A</MenuItem>
+            <MenuItem value="accountB">Account B</MenuItem>
+            <MenuItem value="accountC">Account C</MenuItem>
+            <MenuItem value="viewer">Global Viewer</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
+
+      <Box sx={{ p: 2, pt: 0 }}>
         <Typography variant="h6" noWrap>Menu</Typography>
       </Box>
       <List>
@@ -65,23 +78,6 @@ export default function App() {
           </ListItem>
         ))}
       </List>
-
-      {/* Role Switcher in Sidebar */}
-      <Box sx={{ p: 2 }}>
-        <FormControl fullWidth size="small">
-          <InputLabel>User Role</InputLabel>
-          <Select
-            value={role}
-            label="User Role"
-            onChange={(e) => setRole(e.target.value)}
-          >
-            <MenuItem value="accountA">Account A</MenuItem>
-            <MenuItem value="accountB">Account B</MenuItem>
-            <MenuItem value="userC">User C</MenuItem>
-            <MenuItem value="viewer">Global Viewer</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
     </Box>
   )
 
@@ -125,15 +121,14 @@ export default function App() {
         {drawerContent}
       </Drawer>
 
-      {/* Main Content Area */}
+      {/* Main Content */}
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          p: { xs: 2, sm: 3 },
-          ml: { sm: `${drawerWidth}px` },
-          width: '100%',
-          mt: isMobile ? 7 : 0
+          px: 3,
+          pt: isMobile ? 8 : 4,
+          maxWidth: 'calc(100% - 240px)'
         }}
       >
         <Routes>
