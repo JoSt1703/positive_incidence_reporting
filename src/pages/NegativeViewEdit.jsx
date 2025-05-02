@@ -159,7 +159,7 @@ export default function NegativeViewEdit() {
                   <TableCell>{incident.visibility}</TableCell>
                   <TableCell>
                     <Stack spacing={1} direction="row">
-                      {(story.owner === role) && !isViewer && (
+                      {(incident.owner === role) && !isViewer && (
                         <>
                           <Button variant="outlined" size="small" onClick={() => handleEdit(index)}>
                             Edit
@@ -169,12 +169,12 @@ export default function NegativeViewEdit() {
                           </Button>
                         </>
                       )}
-                      {(story.owner !== role || isViewer) && (
+                      {(incident.owner !== role || isViewer) && (
                         <Button variant="outlined" size="small" onClick={() => handleView(index)}>
                           View
                         </Button>
                       )}
-                      <Button variant="outlined" size="small" onClick={() => handleDownloadOne(story, index)}>
+                      <Button variant="outlined" size="small" onClick={() => handleDownloadOne(incident, index)}>
                         ⬇️ JSON
                       </Button>
                     </Stack>
