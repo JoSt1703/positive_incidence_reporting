@@ -180,7 +180,7 @@ export default function PositiveViewEdit() {
                   <TableCell>{story.visibility}</TableCell>
                   <TableCell>
                     <Stack spacing={1} direction="row">
-                      {!isViewer && story.owner === role && (
+                      {(story.owner === role) && !isViewer && (
                         <>
                           <Button variant="outlined" size="small" onClick={() => handleEdit(index)}>
                             Edit
@@ -190,7 +190,7 @@ export default function PositiveViewEdit() {
                           </Button>
                         </>
                       )}
-                      {(story.owner !== role) && (
+                      {(story.owner !== role || isViewer) && (
                         <Button variant="outlined" size="small" onClick={() => handleView(index)}>
                           View
                         </Button>

@@ -1,7 +1,7 @@
 import { useForm, Controller } from 'react-hook-form'
 import {
-  Box, Button, TextField, Typography, Alert,
-  MenuItem, Select, InputLabel, FormControl
+  Box, Button, TextField, Typography, Alert, MenuItem,
+  Select, InputLabel, FormControl, Paper
 } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
@@ -11,8 +11,8 @@ export default function PositiveEntry() {
   const navigate = useNavigate()
   const stored = JSON.parse(sessionStorage.getItem('successStories')) || []
 
-  const role = sessionStorage.getItem('role') || 'viewer'
-  const isViewer = role === 'viewer'
+  const lockedRole = sessionStorage.getItem('role') || 'viewer'
+  const isViewer = lockedRole === 'viewer'
 
   const { handleSubmit, register, reset, watch, control } = useForm({
     defaultValues: {
@@ -33,26 +33,25 @@ export default function PositiveEntry() {
   }, [index, reset])
 
   const onSubmit = (data) => {
-    if (role === 'viewer' && data.visibility !== 'public') {
+    if (lockedRole === 'viewer' && data.visibility !== 'public') {
       alert('Global Viewer can only submit public stories.')
       return
     }
-  
+
     const entry = {
       ...data,
-      owner: role
+      owner: lockedRole
     }
-  
+
     if (index !== undefined) {
       stored[parseInt(index)] = entry
     } else {
       stored.push(entry)
     }
-  
+
     sessionStorage.setItem('successStories', JSON.stringify(stored))
     navigate('/positive-view')
   }
-  
 
   const summary = watch('summary') || ''
   const visibility = watch('visibility')
@@ -62,14 +61,14 @@ export default function PositiveEntry() {
       <Typography variant="h4" gutterBottom>
         🛡️ Submit a Success Story
       </Typography>
+
+
       <Typography gutterBottom>
-        This form is used to enter a new positive cybersecurity event. Enter as much information as you can —
-        every entry can be updated later in the Event Log.
+        Enter as much information as you can — every entry can be updated later in the Event Log.
       </Typography>
 
       <Alert severity="info" sx={{ mb: 2 }}>
-        <strong>Examples:</strong> Company-wide MFA implementation, a successful phishing awareness workshop,
-        minimal findings in a penetration test, or early threat detection by SOC.
+        <strong>Examples:</strong> MFA rollout, phishing awareness training, or successful early threat detection.
       </Alert>
 
       <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -108,7 +107,6 @@ export default function PositiveEntry() {
           margin="normal"
         />
 
-        {/* Category Dropdown */}
         <FormControl fullWidth margin="normal">
           <InputLabel>Category</InputLabel>
           <Select
@@ -132,7 +130,6 @@ export default function PositiveEntry() {
           </Select>
         </FormControl>
 
-        {/* Visibility */}
         <FormControl fullWidth margin="normal">
           <InputLabel>Visibility</InputLabel>
           <Controller
@@ -148,7 +145,6 @@ export default function PositiveEntry() {
           />
         </FormControl>
 
-        {/* SharedWith (only if shared and not viewer) */}
         {visibility === 'shared' && !isViewer && (
           <FormControl fullWidth margin="normal">
             <InputLabel>Share with</InputLabel>
