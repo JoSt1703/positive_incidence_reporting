@@ -83,6 +83,10 @@ export default function PositiveViewEdit() {
     }
   }
 
+  const handleView = (index) => {
+    navigate(`/positive-view/${index}`)
+  }
+  
   const handleDownloadOne = (story, index) => {
     const json = JSON.stringify(story, null, 2)
     const blob = new Blob([json], { type: 'application/json' })
@@ -185,6 +189,11 @@ export default function PositiveViewEdit() {
                             Delete
                           </Button>
                         </>
+                      )}
+                      {(story.owner !== role) && (
+                        <Button variant="outlined" size="small" onClick={() => handleView(index)}>
+                          View
+                        </Button>
                       )}
                       <Button variant="outlined" size="small" onClick={() => handleDownloadOne(story, index)}>
                         ⬇️ JSON

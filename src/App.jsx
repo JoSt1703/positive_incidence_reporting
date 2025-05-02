@@ -13,12 +13,14 @@ import NegativeEntry from './pages/NegativeEntry'
 import NegativeViewEdit from './pages/NegativeViewEdit'
 import PositiveEntry from './pages/PositiveEntry'
 import PositiveViewEdit from './pages/PositiveViewEdit'
+import PositiveReadOnly from './pages/PositiveReadOnly'
+import NegativeReadOnly from './pages/NegativeReadOnly'
 
 const drawerWidth = 240
 
 const navItems = [
   { path: '/', label: '🏠 Home' },
-  { path: '/positive-entry', label: '🛡️ Story Reporting' },
+  { path: '/positive-entry', label: '🛡️ Stroy Reporting' },
   { path: '/positive-view', label: '📗 Story Log' },
   { path: '/negative-entry', label: '🛑 Incidence Reporting' },
   { path: '/negative-view', label: '📕 Incidence Log' }
@@ -30,6 +32,8 @@ export default function App() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [role, setRole] = useState(() => sessionStorage.getItem('role') || 'viewer')
   const location = useLocation()
+
+  const isEditPage = /^\/(positive-)?edit\/\d+$/.test(location.pathname)
 
   useEffect(() => {
     if (!sessionStorage.getItem('role')) {
@@ -48,18 +52,20 @@ export default function App() {
 
   const drawerContent = (
     <Box>
-      {/* Role Selector at Top */}
-      <Box sx={{ p: 2 }}>
-        <FormControl fullWidth size="small">
-          <InputLabel>User Role</InputLabel>
-          <Select value={role} label="User Role" onChange={(e) => setRole(e.target.value)}>
-            <MenuItem value="viewer">Global Viewer</MenuItem>
-            <MenuItem value="accountA">Account A</MenuItem>
-            <MenuItem value="accountB">Account B</MenuItem>
-            <MenuItem value="accountC">Account C</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
+      {/* Role Switcher (hidden on edit pages) */}
+      {!isEditPage && (
+        <Box sx={{ p: 2 }}>
+          <FormControl fullWidth size="small">
+            <InputLabel>User Role</InputLabel>
+            <Select value={role} label="User Role" onChange={(e) => setRole(e.target.value)}>
+              <MenuItem value="accountA">Account A</MenuItem>
+              <MenuItem value="accountB">Account B</MenuItem>
+              <MenuItem value="accountC">Account C</MenuItem>
+              <MenuItem value="viewer">Global Viewer</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+      )}
 
       <Box sx={{ p: 2, pt: 0 }}>
         <Typography variant="h6" noWrap>Menu</Typography>
@@ -83,7 +89,7 @@ export default function App() {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      {/* AppBar for mobile only */}
+      {/* Top AppBar for mobile */}
       {isMobile && (
         <AppBar position="fixed" sx={{ zIndex: theme.zIndex.drawer + 1 }}>
           <Toolbar>
@@ -121,7 +127,7 @@ export default function App() {
         {drawerContent}
       </Drawer>
 
-      {/* Main Content */}
+      {/* Main content */}
       <Box
         component="main"
         sx={{
@@ -144,6 +150,8 @@ export default function App() {
           <Route path="/positive-entry" element={<PositiveEntry />} />
           <Route path="/positive-edit/:index" element={<PositiveEntry />} />
           <Route path="/positive-view" element={<PositiveViewEdit />} />
+          <Route path="/positive-view/:index" element={<PositiveReadOnly />} />
+          <Route path="/negative-view/:index" element={<NegativeReadOnly />} />
         </Routes>
       </Box>
     </Box>

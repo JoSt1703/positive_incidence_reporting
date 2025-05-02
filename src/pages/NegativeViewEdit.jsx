@@ -74,6 +74,10 @@ export default function NegativeViewEdit() {
     }
   }
 
+  const handleView = (index) => {
+    navigate(`/negative-view/${index}`)
+  }
+
   const handleDownloadOne = (incident, index) => {
     const json = JSON.stringify(incident, null, 2)
     const blob = new Blob([json], { type: 'application/json' })
@@ -164,6 +168,11 @@ export default function NegativeViewEdit() {
                             Delete
                           </Button>
                         </>
+                      )}
+                      {(incident.owner !== role) && (
+                        <Button variant="outlined" size="small" onClick={() => handleView(index)}>
+                          View
+                        </Button>
                       )}
                       <Button variant="outlined" size="small" onClick={() => handleDownloadOne(incident, index)}>
                         ⬇️ JSON
