@@ -128,7 +128,12 @@ export default function App() {
           flexGrow: 1,
           px: 3,
           pt: isMobile ? 8 : 4,
-          maxWidth: 'calc(100% - 240px)'
+          ...(isMobile
+            ? {}
+            : {
+                ml: `${drawerWidth}px`,
+                maxWidth: `calc(100% - ${drawerWidth}px)`
+              })
         }}
       >
         <Routes>

@@ -95,6 +95,7 @@ export default function NegativeEntry() {
                 <Select {...field} multiple labelId="share-with-label" label="Share with">
                   <MenuItem value="accountA">Account A</MenuItem>
                   <MenuItem value="accountB">Account B</MenuItem>
+                  <MenuItem value="accountC">Account C</MenuItem>
                 </Select>
               )}
             />

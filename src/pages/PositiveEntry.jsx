@@ -148,6 +148,7 @@ export default function PositiveEntry() {
                 <Select {...field} multiple>
                   <MenuItem value="accountA">Account A</MenuItem>
                   <MenuItem value="accountB">Account B</MenuItem>
+                  <MenuItem value="accountC">Account C</MenuItem>
                 </Select>
               )}
             />
