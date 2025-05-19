@@ -52,7 +52,6 @@ The app includes the following primary views:
 3. 📗 **Positive Log** – Browse, edit, and filter logged stories
 4. 🛑 **Incident Entry** – Submit conventional incident reports
 5. 📕 **Incident Log** – View and manage incident records
-6. 💡 **Ideas** – (Coming soon) Architectural and design concepts for future development
 
 ---
 
