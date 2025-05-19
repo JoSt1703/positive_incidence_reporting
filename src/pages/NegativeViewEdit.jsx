@@ -31,18 +31,15 @@ export default function NegativeViewEdit() {
     const load = () => {
       const all = JSON.parse(sessionStorage.getItem('incidents')) || []
       const currentRole = sessionStorage.getItem('role') || 'viewer'
-
       const visible = all.filter((incident) => {
         if (currentRole === 'viewer') return incident.visibility === 'public'
         if (incident.owner === currentRole) return true
         if (incident.visibility === 'shared' && (incident.sharedWith || []).includes(currentRole)) return true
         return incident.visibility === 'public'
       })
-
       setAllIncidents(visible)
       setRole(currentRole)
     }
-
     load()
     window.addEventListener('storage', load)
     return () => window.removeEventListener('storage', load)
@@ -50,11 +47,9 @@ export default function NegativeViewEdit() {
 
   useEffect(() => {
     let filtered = [...allIncidents]
-
     if (startDate) filtered = filtered.filter(i => i.incidentOccurred >= startDate)
     if (endDate) filtered = filtered.filter(i => i.incidentOccurred <= endDate)
     if (postedBy) filtered = filtered.filter(i => i.owner === postedBy)
-
     setFiltered(filtered)
   }, [allIncidents, startDate, endDate, postedBy])
 
@@ -95,24 +90,9 @@ export default function NegativeViewEdit() {
         📕 Incident Log ({formatRole(role)})
       </Typography>
 
-      {/* Filters */}
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 2 }}>
-        <TextField
-          label="Start Date"
-          type="date"
-          InputLabelProps={{ shrink: true }}
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          size="small"
-        />
-        <TextField
-          label="End Date"
-          type="date"
-          InputLabelProps={{ shrink: true }}
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-          size="small"
-        />
+        <TextField label="Start Date" type="date" InputLabelProps={{ shrink: true }} value={startDate} onChange={(e) => setStartDate(e.target.value)} size="small" />
+        <TextField label="End Date" type="date" InputLabelProps={{ shrink: true }} value={endDate} onChange={(e) => setEndDate(e.target.value)} size="small" />
         <FormControl sx={{ minWidth: 180 }} size="small">
           <InputLabel>Posted By</InputLabel>
           <Select value={postedBy} label="Posted By" onChange={(e) => setPostedBy(e.target.value)}>
@@ -123,17 +103,9 @@ export default function NegativeViewEdit() {
             <MenuItem value="viewer">Global Viewer</MenuItem>
           </Select>
         </FormControl>
-        <Button
-          variant="outlined"
-          size="small"
-          onClick={() => {
-            setStartDate('')
-            setEndDate('')
-            setPostedBy('')
-          }}
-        >
-          Clear Filters
-        </Button>
+        <Button variant="outlined" size="small" onClick={() => {
+          setStartDate(''); setEndDate(''); setPostedBy('')
+        }}>Clear Filters</Button>
       </Stack>
 
       {filtered.length === 0 ? (
@@ -159,6 +131,9 @@ export default function NegativeViewEdit() {
                   <TableCell>{incident.visibility}</TableCell>
                   <TableCell>
                     <Stack spacing={1} direction="row">
+                      <Button variant="outlined" size="small" onClick={() => handleView(index)}>
+                        View
+                      </Button>
                       {(incident.owner === role) && !isViewer && (
                         <>
                           <Button variant="outlined" size="small" onClick={() => handleEdit(index)}>
@@ -168,11 +143,6 @@ export default function NegativeViewEdit() {
                             Delete
                           </Button>
                         </>
-                      )}
-                      {(incident.owner !== role || isViewer) && (
-                        <Button variant="outlined" size="small" onClick={() => handleView(index)}>
-                          View
-                        </Button>
                       )}
                       <Button variant="outlined" size="small" onClick={() => handleDownloadOne(incident, index)}>
                         ⬇️ JSON

@@ -30,7 +30,6 @@ export default function PositiveViewEdit() {
   const [role, setRole] = useState('viewer')
   const navigate = useNavigate()
 
-  // Filters
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
   const [category, setCategory] = useState('')
@@ -58,12 +57,10 @@ export default function PositiveViewEdit() {
 
   useEffect(() => {
     let filtered = [...allStories]
-
     if (startDate) filtered = filtered.filter(story => story.date >= startDate)
     if (endDate) filtered = filtered.filter(story => story.date <= endDate)
     if (category) filtered = filtered.filter(story => story.category === category)
     if (postedBy) filtered = filtered.filter(story => story.owner === postedBy)
-
     setFiltered(filtered)
   }, [allStories, startDate, endDate, category, postedBy])
 
@@ -86,7 +83,7 @@ export default function PositiveViewEdit() {
   const handleView = (index) => {
     navigate(`/positive-view/${index}`)
   }
-  
+
   const handleDownloadOne = (story, index) => {
     const json = JSON.stringify(story, null, 2)
     const blob = new Blob([json], { type: 'application/json' })
@@ -104,31 +101,14 @@ export default function PositiveViewEdit() {
         📗 Story Log ({formatRole(role)})
       </Typography>
 
-      {/* Filters */}
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 2 }}>
-        <TextField
-          label="Start Date"
-          type="date"
-          InputLabelProps={{ shrink: true }}
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          size="small"
-        />
-        <TextField
-          label="End Date"
-          type="date"
-          InputLabelProps={{ shrink: true }}
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-          size="small"
-        />
+        <TextField label="Start Date" type="date" InputLabelProps={{ shrink: true }} value={startDate} onChange={(e) => setStartDate(e.target.value)} size="small" />
+        <TextField label="End Date" type="date" InputLabelProps={{ shrink: true }} value={endDate} onChange={(e) => setEndDate(e.target.value)} size="small" />
         <FormControl sx={{ minWidth: 180 }} size="small">
           <InputLabel>Category</InputLabel>
           <Select value={category} label="Category" onChange={(e) => setCategory(e.target.value)}>
             <MenuItem value="">All</MenuItem>
-            {CATEGORIES.map(cat => (
-              <MenuItem key={cat} value={cat}>{cat}</MenuItem>
-            ))}
+            {CATEGORIES.map(cat => <MenuItem key={cat} value={cat}>{cat}</MenuItem>)}
           </Select>
         </FormControl>
         <FormControl sx={{ minWidth: 160 }} size="small">
@@ -141,18 +121,9 @@ export default function PositiveViewEdit() {
             <MenuItem value="viewer">Global Viewer</MenuItem>
           </Select>
         </FormControl>
-        <Button
-          variant="outlined"
-          size="small"
-          onClick={() => {
-            setStartDate('')
-            setEndDate('')
-            setCategory('')
-            setPostedBy('')
-          }}
-        >
-          Clear Filters
-        </Button>
+        <Button variant="outlined" size="small" onClick={() => {
+          setStartDate(''); setEndDate(''); setCategory(''); setPostedBy('')
+        }}>Clear Filters</Button>
       </Stack>
 
       {filtered.length === 0 ? (
@@ -180,6 +151,9 @@ export default function PositiveViewEdit() {
                   <TableCell>{story.visibility}</TableCell>
                   <TableCell>
                     <Stack spacing={1} direction="row">
+                      <Button variant="outlined" size="small" onClick={() => handleView(index)}>
+                        View
+                      </Button>
                       {(story.owner === role) && !isViewer && (
                         <>
                           <Button variant="outlined" size="small" onClick={() => handleEdit(index)}>
@@ -189,11 +163,6 @@ export default function PositiveViewEdit() {
                             Delete
                           </Button>
                         </>
-                      )}
-                      {(story.owner !== role || isViewer) && (
-                        <Button variant="outlined" size="small" onClick={() => handleView(index)}>
-                          View
-                        </Button>
                       )}
                       <Button variant="outlined" size="small" onClick={() => handleDownloadOne(story, index)}>
                         ⬇️ JSON
