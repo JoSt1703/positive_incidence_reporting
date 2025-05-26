@@ -21,7 +21,7 @@ const drawerWidth = 240
 
 const navItems = [
   { path: '/', label: '🏠 Home' },
-  { path: '/positive-entry', label: '🛡️ Stroy Reporting' },
+  { path: '/positive-entry', label: '🛡️ Story Reporting' },
   { path: '/positive-view', label: '📗 Story Log' },
   { path: '/negative-entry', label: '🛑 Incidence Reporting' },
   { path: '/negative-view', label: '📕 Incidence Log' }
